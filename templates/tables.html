@@ -1,0 +1,53 @@
+{% extends "master.html" %}
+{% block titulo %}
+	OER available
+{% endblock %}
+
+{% block contenido %}
+    <div class="container-fluid">
+        <h1 class="mt-4">OER Available</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active">OER</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">OER available in triplet format, if you want to expand this repository, you should review the storage of the same.</div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable OER</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>View</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for recurso in recursos %}
+                                <tr>
+                                    <td>{{recurso.titulo}}</td>
+                                    <td>{{recurso.categoria}}</td>
+                                    <td><a href="{{recurso.enlace}}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail" role="button">More information</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    {% comment %} <script src="{% static 'assets/demo/datatables-demo.js' %}"></script> {% endcomment %}
+{% endblock %}

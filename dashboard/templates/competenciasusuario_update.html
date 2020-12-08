@@ -1,0 +1,63 @@
+{% extends "master.html" %}
+{% block titulo %}
+	Actulizar competencias
+{% endblock %}
+
+{% block contenido %}
+    <h1 class="mt-4 text-center">Actulizar Competencias Digitales</h1>
+    <div class="row">
+        <div class="col-xl-12">
+            <form class="custom-form" method="POST" action="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="fieldWrapper col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <label for="{{ form.fkcompetence.id_for_label }}"><b>Competencia Digital:</b></label>
+                                {{competenciaActual.fkcompetence.namecompetencees}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fieldWrapper col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <label for="descrip">Area:</label>
+                                <p id="nombre_area">
+                                    {{competenciaActual.fkcompetence.fkarea.nameareaes}}
+                                </p>
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="descrip">Descripción:</label>
+                                <p id="descripcion_competencia">
+                                    {{competenciaActual.fkcompetence.descriptioncompetencees}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fieldWrapper col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                {{ form.tiene.errors }}
+                                <label for="{{ form.tiene.id_for_label }}"><b>¿Crees tener la competencia?</b></label>
+                            </div>
+                            <div class="col-xl-12">
+                                {{ form.tiene }}
+                            </div>
+                            <div class="col-xl-12">
+                                <label class="small mb-1 help" for="help_textTiene">En pantalla puedes ver la elección actual.</label>
+                                {% if form.tiene.help_text %}
+                                    <label class="small mb-1 help" for="help_textTiene">{{ form.tiene.help_text|safe }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-user">
+                            Actulizar
+                        </button>
+                    </div>
+              </form>
+        </div>
+    </div>
+{% endblock %}

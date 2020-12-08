@@ -1,0 +1,98 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block titulo %}
+	Registro de competencias
+{% endblock %}
+
+{% block contenido %}
+  <h1 class="mt-4 text-center">Registro de Competencias Digitales</h1>
+  <div class="row">
+    <div class="col-xl-12">
+      <form class="custom-form" method="POST" action="">
+        {% csrf_token %}
+        <div class="row">
+          <div class="fieldWrapper col-xl-12">
+            <div class="row">
+              <div class="col-xl-12">
+                <label for="{{ form.fkcompetence.id_for_label }}"><b>Competencia Digital:</b></label>
+                {{form.fkcompetence}}
+              </div>
+              <div class="col-xl-12">
+                {% if form.fkcompetence.help_text %}
+                  <label class="small mb-1" for="help_textCompetencia">{{ form.fkcompetence.help_text }}</label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="fieldWrapper col-xl-12">
+            <div class="row">
+              <div class="col-xl-12">
+                <label for="descrip"><b>Area:</b></label>
+                <p id="nombre_area"></p>
+              </div>
+              <div class="col-xl-12">
+                <label for="descrip"><b>Descripción:</b></label>
+                <p id="descripcion_competencia"></p>
+              </div>
+            </div>
+          </div>
+          <div class="fieldWrapper col-xl-12">
+            <div class="row">
+              <div class="col-xl-12">
+                {{ form.tiene.errors }}
+                <label for="{{ form.tiene.id_for_label }}"><b>¿Crees tener la competencia?</b></label>
+                {{ form.tiene }}
+              </div>
+              <div class="col-xl-12">
+                {% if form.tiene.help_text %}
+                  <label class="small mb-1 help" for="help_textTiene">{{ form.tiene.help_text|safe }}</label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-user">
+            Registrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+{% block script %}
+  <script type="text/javascript">
+    $("#id_fkcompetence").change(function () {// get the url of the `load_cities` view
+      var fkCompetencia = $("#id_fkcompetence").val(); // get the selected country ID from the HTML input
+      // var x = document.getElementById("fkcompetence").value; // get the selected country ID from the HTML input
+      // console.log('fk Competence', fkCompetencia);
+      var board_url = "{%  url 'ajaxDetalleComp' %}";
+      $.ajax({
+        // initialize an AJAX request      
+        url: board_url,
+        // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        type: "POST",
+        data: {
+        'fkCompetencia': fkCompetencia,
+        // add nombCompetencia to the GET parameters
+        //'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        // add nombCompetencia id to the GET parameters
+        },
+        datatype:'json',
+        success: function(data) {
+          console.log('cambio')
+          // `data` is the return of the `load_cities` view function
+          var nombArea = document.getElementById("nombre_area");
+          var descripcionComp = document.getElementById("descripcion_competencia");
+          // console.log(data);
+          nombArea.innerHTML = data['infoArea'];
+          descripcionComp.innerHTML = data['infoCompetencia'];
+        }
+      });
+    });      
+  </script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "master.html" %}
+{% block titulo %}
+    Registro de usuarios
+{% endblock %}
+
+{% load i18n %}
+
+{% block contenido %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h1 class="text-center font-weight-light my-4">¡Registrate es gratis!</h1>
+                    <h3 class="text-center font-weight-light my-4">Crea tu cuenta</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url "nuevoUs" %}">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputFirstName">{{ form.first_name.label_tag }}</label>
+                                    {{ form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputLastName">{{ form.last_name.label_tag }} </label>
+                                    {{ form.last_name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputEmailAddress">{{ form.email.label_tag }}</label>
+                                    {{ form.email }}
+                                    <label class="small mb-1" for="help_textEmail">{{ form.email.help_text }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputUserName">{{ form.username.label_tag }}</label>
+                                    {{ form.username }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputPassword">{{ form.password.label_tag }}</label>
+                                    {{ form.password }}
+                                </div>
+                            </div>
+                            {% comment %} <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputPassword">{{ form.password1.label_tag }}</label>
+                                    {{ form.password1 }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputConfirmPassword">{{ form.password2.label_tag }}</label>
+                                    {{ form.password2 }}
+                                    <label class="small mb-1" for="help_textPassword2">{{ form.password2.help_text }}</label>
+                                    <label class="small mb-1" for="errorPassword2">{{ form.password2.error_message }}</label>
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 offset-md-4">
+                                <div class="form-group">
+                                    <input class="btn btn-block btn-primary" type="submit" value="{% trans 'Unete' %}" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="small">
+                        <p>
+                            ¿Tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <div id="layoutAuthentication_footer">
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2019</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

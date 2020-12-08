@@ -1,0 +1,128 @@
+{% extends "master.html" %}
+{% block titulo %}
+	Mis competencias
+{% endblock %}
+
+{% block contenido %}
+    <h1 class="mt-4 text-center">Mis competencias digitales</h1>
+    <div class="row">
+        <div class="col-xl-12">
+            <label class="mb-4" for="help_textCompetencia">Aquellas en negrita significan que tiene.</label>
+        </div>
+        <div class="col-xl-12">
+            {% for detalle in misCompetencias %}
+                {% if detalle.fkcompetence.fkarea.idarea == 1 %}
+                    <div class="card">
+                        <div class="card-header" id="{{detalle.fkcompetence.fkarea.idarea}}">
+                            <b>Area: </b>{{detalle.fkcompetence.fkarea.nameareaes}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <input type="checkbox" name="{{detalle.fkcompetence.namecompetencees|slugify}}" id="{{detalle.fkcompetence.idcompetence}}" value="{{detalle.tiene}}" {% if detalle.tiene is True %} checked {% endif %} disabled="True">
+                                {% if detalle.tiene == True %}
+                                    <b class="text-black">{{detalle.fkcompetence.namecompetencees}}</b>
+                                {% else %}
+                                    {{detalle.fkcompetence.namecompetencees}}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <label for="descripcionCompetencia">Descripción:</label>
+                                {{detalle.fkcompetence.descriptioncompetencees}}
+                            </p>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                        </div>
+                    </div>
+                    <br>
+                {% elif detalle.fkcompetence.fkarea.idarea == 2 %}
+                    <div class="card">
+                        <div class="card-header" id="{{detalle.fkcompetence.fkarea.idarea}}">
+                            <b>Area: </b>{{detalle.fkcompetence.fkarea.nameareaes}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <input type="checkbox" name="{{detalle.fkcompetence.namecompetencees|slugify}}" id="{{detalle.fkcompetence.idcompetence}}" value="{{detalle.tiene}}" {% if detalle.tiene is True %} checked {% endif %} disabled="True">
+                                {% if detalle.tiene == True %}
+                                    <b class="text-black">{{detalle.fkcompetence.namecompetencees}}</b>
+                                {% else %}
+                                    {{detalle.fkcompetence.namecompetencees}}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <label for="descripcionCompetencia">Descripción:</label>
+                                {{detalle.fkcompetence.descriptioncompetencees}}
+                            </p>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                        </div>
+                    </div>
+                    <br>
+                {% elif detalle.fkcompetence.fkarea.idarea == 3 %}
+                    <div class="card">
+                        <div class="card-header" id="{{detalle.fkcompetence.fkarea.idarea}}">
+                            <b>Area: </b>{{detalle.fkcompetence.fkarea.nameareaes}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <input type="checkbox" name="{{detalle.fkcompetence.namecompetencees|slugify}}" id="{{detalle.fkcompetence.idcompetence}}" value="{{detalle.tiene}}" {% if detalle.tiene is True %} checked {% endif %} disabled="True">
+                                {% if detalle.tiene == True %}
+                                    <b class="text-black">{{detalle.fkcompetence.namecompetencees}}</b>
+                                {% else %}
+                                    {{detalle.fkcompetence.namecompetencees}}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <label for="descripcionCompetencia">Descripción:</label>
+                                {{detalle.fkcompetence.descriptioncompetencees}}
+                            </p>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                        </div>
+                    </div>
+                    <br>
+                {% elif detalle.fkcompetence.fkarea.idarea == 4 %}
+                    <div class="card">
+                        <div class="card-header" id="{{detalle.fkcompetence.fkarea.idarea}}">
+                            <b>Area: </b>{{detalle.fkcompetence.fkarea.nameareaes}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <input type="checkbox" name="{{detalle.fkcompetence.namecompetencees|slugify}}" id="{{detalle.fkcompetence.idcompetence}}" value="{{detalle.tiene}}" {% if detalle.tiene is True %} checked {% endif %} disabled="True">
+                                {% if detalle.tiene == True %}
+                                    <b class="text-black">{{detalle.fkcompetence.namecompetencees}}</b>
+                                {% else %}
+                                    {{detalle.fkcompetence.namecompetencees}}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <label for="descripcionCompetencia">Descripción:</label>
+                                {{detalle.fkcompetence.descriptioncompetencees}}
+                            </p>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                        </div>
+                    </div>
+                    <br>
+                {% else %}
+                    <div class="card">
+                        <div class="card-header" id="{{detalle.fkcompetence.fkarea.idarea}}">
+                            <b>Area: </b>{{detalle.fkcompetence.fkarea.nameareaes}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <input type="checkbox" name="{{detalle.fkcompetence.namecompetencees|slugify}}" id="{{detalle.fkcompetence.idcompetence}}" value="{{detalle.tiene}}" {% if detalle.tiene is True %} checked {% endif %} disabled="True">
+                                {% if detalle.tiene == True %}
+                                    <b class="text-black">{{detalle.fkcompetence.namecompetencees}}</b>
+                                {% else %}
+                                    {{detalle.fkcompetence.namecompetencees}}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <label for="descripcionCompetencia">Descripción:</label>
+                                {{detalle.fkcompetence.descriptioncompetencees}}
+                            </p>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

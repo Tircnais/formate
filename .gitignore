@@ -1,0 +1,42 @@
+### VisualStudioCode ###
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,django
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+**/migrations/*
+!**/migrations/__init__.py
+.python-version
+
+# Cuando se geren cambios se agrega la linea correspondiente a la copia y se actualiza la local, la de abajao
+formate/settings.py
+# Modolo FastText demasiado pesado para el repositorio
+recomendacion/fastText/model_rea.bin

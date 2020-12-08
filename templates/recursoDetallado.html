@@ -1,0 +1,55 @@
+{% extends "master.html" %}
+{% block titulo %}
+	OER available
+{% endblock %}
+
+{% block contenido %}
+    <div class="container-fluid">
+        <h1 class="mt-4">OER Available</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active">OER</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">Detail of the requested resource.</div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable OER</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for recurso in recursos %}
+                                <tr>
+                                    <td>{{recurso.predicado}}</td>
+                                    <td>{{recurso.objeto}}</td>
+                                    <td><a href="{{recurso.objeto}}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail" role="button">More information</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    {% comment %} <script src="assets/demo/datatables-demo.js"></script>     {% endcomment %}
+{% endblock %}

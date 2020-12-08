@@ -1,0 +1,196 @@
+{% extends "master.html" %}
+{% block titulo %}
+	Recommendation
+{% endblock %}
+
+{% block contenido %}
+    <h1 class="mt-4 text-center">Recommendation</h1>
+    <div class="row">
+        <div class="col-xl-12">
+            <label class="mb-4" for="help_textCompetencia">Select the digital competition:</label>
+            <select name="select" id="id_fkcompetence">
+                <option value="N/A">Select one</option>
+                {% for detalle in misCompetencias %}
+                    <option value="{{detalle.fkcompetence.pk}}">{{detalle.fkcompetence.namecompetencees}}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="idUser" id="pkUser" value="{{miUsuario.pk}}">
+        </div>
+        <div class="col-xl-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active h6" id="home-tab" data-toggle="tab" href="#nav-detalle" role="tab" aria-controls="home" aria-selected="true">Detail</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h6" id="anotacion-tab" data-toggle="tab" href="#nav-anotacion" role="tab" aria-controls="anotacion" aria-selected="false">Semantic Annotation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h6" id="contact-tab" data-toggle="tab" href="#nav-asignado" role="tab" aria-controls="contact" aria-selected="false">Recommendation</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-detalle" role="tabpanel" aria-labelledby="nav-dbpedia-tab">
+                    <div class="card-header" id="nombre_area">Select first</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <input type="checkbox" id="siTiene" disabled="True">
+                        </h5>
+                        <section class="card-text">
+                            <p class="text-justify" id="descripcion_competencia"></p>
+                        </section>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="nav-anotacion" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">DBpedia-spotlight</a>
+                                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Fred</a>
+                                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Ontology Digcomp</a>
+                                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Ontology REA</a>
+                            </div>
+                        </div>
+                        <div class="col-10">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <div class="row" id="anotacionDbpedia">
+                                        Annotation with DBpedia
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                    <div class="row" id="anotacionFred">
+                                        Annotation with Fred
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                    <div class="row" id="anotacionDigcomp">
+                                        Annotation with Digcomp
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                    <div class="row" id="anotacionREA">
+                                        Annotation with REA
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-asignado" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="card-header" id="recomendado"><b>Open Educational Resource</b></div>
+                    <div class="card-body">
+                        <h5 class="card-title" id="nombRecurso">Searching</h5>
+                        <section class="card-text" id="recomendacion">
+                            <p class='text-justify'>Wait ... looking</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    $("#id_fkcompetence").change(function () {
+        var fkCompetencia = $("#id_fkcompetence").val();
+        // console.log('id_fkcompetence\t', fkCompetencia);
+        var pkUser = $("#pkUser").val();
+        // console.log('pkUser\t', pkUser);
+        var board_url = "{%  url 'ajaxMuestraRecurso' %}";
+        $.ajax({
+            // initialize an AJAX request      
+            url: board_url,
+            type: "GET",
+            data: {
+                'fkCompetencia': fkCompetencia,
+                'pkUser': pkUser,
+            },
+            datatype:'json',
+            success: function(data) {
+                // TAB 3
+                var reatitulo = document.getElementById("nombRecurso");
+                var readetalle = document.getElementById("recomendacion");
+                console.log('Cargando recomendacion actual\t', data['recomendadoActual'])
+                reatitulo.innerHTML = '<b>'+data['recomendadoActual']+'</b>';
+                readetalle.innerHTML = '<p class="text-justify">'+data['recomendadoActual']+'</p>';
+            }
+        });
+    });
+
+    $("#id_fkcompetence").change(function () {
+        var fkCompetencia = $("#id_fkcompetence").val();
+        // console.log('id_fkcompetence\t', fkCompetencia);
+        var pkUser = $("#pkUser").val();
+        // console.log('pkUser\t', pkUser);
+        var board_url = "{%  url 'ajaxDetalle' %}";
+        $.ajax({
+            // initialize an AJAX request      
+            url: board_url,
+            type: "GET",
+            data: {
+                'fkCompetencia': fkCompetencia,
+                'pkUser': pkUser,
+            },
+            datatype:'json',
+            success: function(data) {
+                // console.log('cambio');
+                // console.log(data);
+                var iniCard = '<div class="col-12">';
+                var iniCardHTitulo = '<div class="card-header">';
+                var finCardHTitulo = '</div>';
+                var iniCardBTitulo = '<div class="card-body">';
+                var iniBTitulo = '<h5 class="card-title">';
+                var finBTitulo = '</h5>';
+                var iniSectionCard = '<section class="card-text"><p class="text-justify">';
+                var finSectionCard = '</p></section>';
+                var finCardBTitulo = '</div>';
+                var finCard = '</div>';
+
+                // TAB 1
+                var nombArea = document.getElementById("nombre_area");
+                var tiene = document.getElementById("siTiene");
+                var descripcionComp = document.getElementById("descripcion_competencia");
+                // TAB 2
+                var htmlSpotlight = document.getElementById("anotacionDbpedia");
+                var htmlFred = document.getElementById("anotacionFred");
+                var htmlDigcomp = document.getElementById("anotacionDigcomp");
+                // TAB 3
+                var reatitulo = document.getElementById("nombRecurso");
+                var readetalle = document.getElementById("recomendacion");
+                // OUT Tab 1
+                nombArea.innerHTML = '<b>Area:</b> '+data['infoArea'];
+                tiene.value = data['tiene'];
+                tiene.checked = true;
+                descripcionComp.innerHTML = '<b>Description:</b> '+ data['infoCompetencia'];
+                // OUT Tab 2
+                // console.log('anotacionSeman\t', data['anotacion']);
+                // console.log('entidadesFred\t', data['anotacion']['vinculacionFred']);
+                if (data['anotacion']['vicunlancionDB'].length === 0){
+                    htmlSpotlight.innerHTML = '<p class="text-justify"><b>No response</b> from DBpedia Spotlight API</p>';
+                }else{
+                    htmlSpotlight.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vicunlancionDB'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vicunlancionDB'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vicunlancionDB'][2] + finSectionCard + finCardBTitulo + finCard;
+                }
+                if(data['anotacion']['vinculacionFred'].length === 0) {
+                    htmlFred.innerHTML = '<p class="text-justify"><b>No response</b> from Fred API. <b>Remember:</b> The token is valid for 1 year and gives you 5 requests per minute, maximum 1500 per day.\n<b>This token was obtained:</b> 08/01/2020.</p>';
+                }else{
+                    htmlFred.innerHTML = data['anotacion']['vinculacionFred'];
+                }
+                if (data['anotacion']['vinculacionDigcomp'].length === 0){
+                    htmlDigcomp.innerHTML = '<p class="text-justify"><b>No response</b> from Ontology Digcomp. <b>Check</b> which service where Digcomp is located is up.</p>';
+                }else{
+                    htmlDigcomp.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vinculacionDigcomp'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vinculacionDigcomp'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vinculacionDigcomp'][2] + finSectionCard + finCardBTitulo + finCard;
+                }
+                // OUT Tab 3
+                // console.log('Recomendacion\t', data['recurso']);
+                reatitulo.innerHTML = '<b>'+data['recurso']+'</b>';
+                readetalle.innerHTML = '<p class="text-justify">'+data['recurso']+'</p>';
+            }
+        });
+    });
+  </script>
+{% endblock %}
+
+{% comment %} {% include 'templates/footer.html' %} {% endcomment %}
