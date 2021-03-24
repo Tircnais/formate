@@ -38,25 +38,31 @@ class Funciones:
             ----------
                 idUser (int): PK del usuario logeado en ese instante
                 idCompetencia (int): ID de Competencia digital del Usuario a actualizar
-                recursos (list): Texto en lenguaje natural
+                recursos (list): Lista de recuros sugeridos
+            
+            Retoorna
+            ----------
+                recursos (list): Lista de recuros asignados
             
         '''
         existe = self.search_CompUsuario(idUser, idCompetencia)
         # print('existe', existe.pk)
-        if existe is None:
-            existe = self.search_CompUsuario(idUser, idCompetencia)
-            # Lo vuelve a buscar
-        else:    
+        if existe is not None:
+            # encontrado
             try:
                 actual = Competenciasusuario.objects.get(fkuser=idUser, fkcompetence= idCompetencia)
-                recursos = str(recursos)
+                # recursos = str(recursos)
                 actual.recomendacion = recursos
                 actual.save()
+                return recursos
             except Competenciasusuario.DoesNotExist as errorNoExiste:
                 error = self.log_error(donde='actualizando Competencia digital de Usuario', idComp=idCompetencia, recursos=recursos, error=str(errorNoExiste))
-                print('error\n{}'.format(error))
+                print('error\n{}\nSe intentar nuevamente.'.format(error))
                 self.update_CompUsuario(idUser, idCompetencia, recursos)
                 # Si hay error llama a la misma funcion para actulizar se (*solo va a salir si la operacion es exitosa*)
+        else:
+            existe = self.search_CompUsuario(idUser, idCompetencia)
+            # Lo vuelve a buscar       
         
     
     def __del__(self):

@@ -2,13 +2,13 @@ from rdflib.serializer import Serializer
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 class entitiesDigcomp:
-    # endpointREA ="http://192.168.1.16:7200/repositories/02"
+    # endpointREA ="http://localhost:7200/repositories/02"
     def anotacion(self, nombArea: str, nombComp: str):
         # print("llega:\t", nombArea)
         # Endpoint con Server D2RQ
         sparqlendpoint = "http://localhost:2020/sparql"
-        # Endpoint con Graph DB
-        sparqlendpoint ="http://192.168.1.16:7200/repositories/01"
+        # Endpoint con GraphDB
+        sparqlendpoint ="http://localhost:7200/repositories/01"
         # Consulta SPARQL para buscar en la BD la entidad encontrada
         sbcEndpoint = SPARQLWrapper(sparqlendpoint)
         consulta = """
@@ -73,9 +73,9 @@ class entitiesDigcomp:
         # print('Detalle competencia\t{}\nEntidad\t{}\n'.format(texto, tripletaResultante[2]))
         
         # Endpoint Realtime con Server D2RQ
-        sparqlendpoint = "http://localhost:2020/sparql"
-        # Endpoint Storage con Graph DB
-        # sparqlendpoint ="http://192.168.1.16:7200/repositories/01"
+        # sparqlendpoint = "http://localhost:2020/sparql"
+        # Endpoint Storage con GraphDB
+        sparqlendpoint ="http://localhost:7200/repositories/01"
 
         if tripletaResultante is not None:
             # print('URI Comp\tpComp\tCompEn\tCompEs\tURI Area\tpArea\tArea En\tArea Es')
@@ -92,8 +92,8 @@ class entitiesDigcomp:
                 areaEn = triple[6]
                 areaEs = triple[7]
                 # print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(uriComp, pComp, compEn, compEs, uriArea, pArea, areaEn, areaEs))
-                if '192.168.1.16' in sparqlendpoint:
-                    # Resolviendo URI para Graph DB
+                if 'localhost' in sparqlendpoint:
+                    # Resolviendo URI para GraphDB
                     uriArea = uriArea.replace("http://localhost:7200/digcomp/areas/", "http://localhost:7200/resource?uri=http:%2F%2Flocalhost:7200%2Fdigcomp%2Fareas%2F")
                     uriComp = uriComp.replace("http://localhost:7200/digcomp/competences/", "http://localhost:7200/resource?uri=http:%2F%2Flocalhost:7200%2Fdigcomp%2Fcompetences%2F")
                 if nombArea == areaEn or nombArea == areaEs:
@@ -116,11 +116,11 @@ class entitiesDigcomp:
     
     def recomendacion(self, titulo: str, descripcion: str, palabraClave: str):
         # print("llega:\t", nombArea)
-        # Endpoint Storage con Graph DB
-        sparqlendpoint ="http://192.168.1.16:7200/repositories/02"
+        # Endpoint Storage con GraphDB
+        sparqlendpoint ="http://localhost:7200/repositories/02"
         sbcEndpoint = SPARQLWrapper(sparqlendpoint)
+
         # Consulta SPARQL para buscar en la BD la entidad encontrada
-        
         consulta = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -162,12 +162,13 @@ class entitiesDigcomp:
         return lista
 
     def recursosDisponibles(self):
-        # Endpoint Storage con Graph DB
+        # Endpoint Storage con GraphDB
         # Apertura del endpoint para ejecutar la consulta
-        sparqlendpoint ="http://192.168.1.16:7200/repositories/02"
+        sparqlendpoint ="http://localhost:7200/repositories/02"
         sbcEndpoint = SPARQLWrapper(sparqlendpoint)
 
         # Consulta SPARQL para lista recursos disponibles
+        # Titulo, disciplina, URI
         consulta = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -198,6 +199,7 @@ class entitiesDigcomp:
             recurso['categoria'] = categoria
             recurso['enlace'] = ver_mas
             lista.append(recurso)
+            # print('recurso disponible\t', recurso)
         return lista
     
     def recursoDetallado(self, uri: str):
@@ -209,9 +211,9 @@ class entitiesDigcomp:
         Returns:
             recurso (dict): Detalle encontrado del recurso
         """        
-        # Endpoint Storage con Graph DB
+        # Endpoint Storage con GraphDB
         # Apertura del endpoint para ejecutar la consulta
-        sparqlendpoint ="http://192.168.1.16:7200/repositories/02"
+        sparqlendpoint ="http://localhost:7200/repositories/02"
         sbcEndpoint = SPARQLWrapper(sparqlendpoint)
 
         # Consulta SPARQL para lista recursos disponibles

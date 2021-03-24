@@ -12,6 +12,8 @@ from recomendacion.Triplestore.servicioConsulta import entitiesDigcomp
 # from rdflib.namespace import RDF, RDFS, Literal, XSD
 # salida como tabla solo para revisar
 from recomendacion.Fred.crearRDF import PreparandoArchivos
+# Se importan la funciones creadas
+from .funciones import Funciones
 
 class Integracion:
     """Identificando entidades y etiquetando
@@ -101,12 +103,8 @@ class Integracion:
         # Reconocimiento de entidades FRED
         objectFred = entitiesFred()
         entidadesFred = objectFred.entidadesFred(entradaTexto)
-        rdfFred = '<?xml version="1.0"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="http://www.w3.org/"><dc:title>World Wide Web Consortium</dc:title> </rdf:Description></rdf:RDF>'
-        # rdfFred = "objectFred.entidadesFred(entradaTexto)"
-        # print('outFRED\n',rdfFred)
         if entidadesFred is not None:
-            anotacion_FRED = self.vinculandoEntidades(entradaTexto, entidadesFred)
-            
+            anotacion_FRED = self.vinculandoEntidades(entradaTexto, entidadesFred)    
             # dictionarioEntidades['entidadesFred'] = str(rdfFred)
             dictionarioEntidades['entidadesFred'] = entidadesFred
             dictionarioEntidades['vinculacionFred'] = anotacion_FRED
@@ -126,58 +124,47 @@ class Integracion:
         # print('Entidades encontradas\n{}'.format(dictionarioEntidades))
         return dictionarioEntidades
     
-
-    def buscaCoincidencias(self, etiquetas: list, entidades: list):
-        """Compara las etiquetas de los REA con las entidades encontradas en la Competecia Digital. Al superar el umbral establecido lo agrega a la lista. Esta lista es usara para buscar un RECURSO acorde.
+    # se compara consigo mismo, no con el triplestore
+    def buscaCoincidencias(self, prediccionCD: list, recursos: list):
+        """Compara la prediccion de la CD con c/u de los REA encontrados. Al superar el umbral establecido lo agrega a la lista. Esta lista es usara para asignar el RECURSO.
         
 
         Args:
-            etiquetas (list): LISTA de etiquetas percibidas por fastText
-            entidades (list): LISTA de entidades encontradas
+            prediccionCD (list): LISTA de etiquetas percibidas por fastText
+            recursos (list): LISTA de REA encontradas
 
         Returns:
             list: Lista de coincidencias.
         """
-        entidadesIdentificadas = []
-        if entidades['entidadesDB'] is not None:
-            entidadesIdentificadas.extend(entidades['entidadesDB'])
-        if entidades['entidadesFred'] is not None:
-            entidadesIdentificadas.extend(entidades['entidadesFred'])
-        if entidades['entidadesDigcomp'] is not None:
-            entidadesIdentificadas.extend(entidades['entidadesDigcomp'])
-        entidadesIdentificadas = list(dict.fromkeys(entidadesIdentificadas))
-        # Quitar duplicados en la lista'
         # print('Etiquetas(Tipo)\tEntidades(Tipo)\n{}\t{}\nEtiquetas\n{}Entidades\n{}'.format(type(etiquetas), type(entidades), etiquetas, entidades))
-        coincidencias = []
-        for etiqueta, medicion in etiquetas:
-            print("{:<10} | {:<10}".format(etiqueta, medicion))
-            # medicion = round(medicion*100, 2)
+        recursoRecomendados = []
+        umbral = 0.15
+        # etiqueta = prediccionCD[0]
+        # medicion = prediccionCD[1]
+        for etiqueta, medicion in prediccionCD:
+            # print('Prediccion CD\nEtiqueta: %s\tMedicion: %.2f' %(etiqueta, medicion))
             medicion = round(medicion, 2)
             # se convieter a % (con 2 decimales)
-            if len(entidadesIdentificadas) > 0:
-                for uri, entidad in entidadesIdentificadas:
-                    if medicion > 0.20 and etiqueta in entidad or entidad in etiqueta:
-                        print('etiqueta\t{}'.format(etiqueta))
-                        # print('etiqueta\t{}\nentidad\t{}'.format(etiqueta, entidad))
-                        coincidencias.append((entidad, etiqueta, medicion))
-        
-        # print('coincidencias\n', coincidencias)
-        # Consulta el triplestore de REA
-        
-        recursoRecomendados = []
-        if len(coincidencias) > 0:
-            servicioConsultas = entitiesDigcomp()
-            for palabrasABuscar in coincidencias:
-                print(coincidencia)
-                recursoEncontrado = servicioConsultas.recomendacion(palabrasABuscar[0], palabrasABuscar[1], palabrasABuscar[1])
-                recursoRecomendados.append(recursoEncontrado)
-            del servicioConsultas
-        else:
-            recursoRecomendados = "Sin resultados"
+            for titulo, enlace, prediccion in recursos:
+                if type(prediccion) is list:
+                    # cuando hay mas de una prediccion
+                    for p_eti, p_med in prediccion:
+                        # print("{0} | {1}".format(p_eti, p_med))
+                        p_med = round(p_med, 2)
+                        if medicion > umbral and p_med  > umbral:
+                            # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
+                            recursoRecomendados.append((titulo, enlace))
+                else:
+                    # cuando solo hay una prediccion
+                    # print("{0} | {1}".format(prediccion[0], prediccion[1]))
+                    prediccion = round(prediccion[1], 2)
+                    if medicion > umbral and prediccion  > umbral:
+                        # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
+                        recursoRecomendados.append({'uri': enlace})
         return recursoRecomendados
 
 
-    def recursoRecomendado(self, entradaTexto: list):
+    def recursoRecomendado(self, idUser: int, idComp: int, entradaTexto: list):
         """Busco el recurso que tiene relacion con la competencia digital entrante
 
         Args:
@@ -186,11 +173,46 @@ class Integracion:
         Returns:
             list: Recurso con relevancia
         """
-        etiquetas = self.etiquetandoTexto(entradaTexto)
+        # fastText Etiquetas y Entidades de la CD seleccionada
+        prediconCD = self.etiquetandoTexto(entradaTexto)
+        # Anotacion semantica con los diversos servicios/vocab
         entidades = self.entidadesEncontradas(entradaTexto)
+        
+        # Consulta del Recurso(s) actual(es)
+        objectFunciones = Funciones()
+        recomendacionActual = objectFunciones.search_CompUsuario(idUser, idComp)
+        print('Recomendacion actual:\n{}'.format(recomendacionActual.recomendacion))
+        recomendacionActual = recomendacionActual.recomendacion
+        # Borramos el OBJ para liberar memoria
+        del objectFunciones
+        
+        # Consulta para determinar los REA disponibles
+        objectDigcomp = entitiesDigcomp()
+        reas = objectDigcomp.recursosDisponibles()
+        print('Recursos Disponibles... integracion.py LEN: ', len(reas))
+        del objectDigcomp
+
+        # Prediccion con fastText
+        listaREA = []
+        for oer in reas:
+            # print('>>{}\n'.format(oer))
+            prediccionREA = self.etiquetandoTexto(oer['titulo']+' '+oer['categoria'])
+            listaREA.append((oer['titulo'], oer['enlace'], prediccionREA))
+        
+        sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
+        recomendaciones = []
+        if recomendacionActual == 'Sin resultados' or recomendacionActual == '' or recomendacionActual == None or len(sugerencias) == 0:
+            # en caso de que no exista recurso/recomendaciones
+            recomendaciones = 'Sin resultados'
+        else:
+            recomendaciones.append(recomendacionActual)
+            recomendaciones.append(sugerencias)
+            # agrega a la lista los nuevos recursos
+        recomendaciones = list(dict.fromkeys(recomendaciones))
+        # Quitar duplicados en la lista
         dicionario = {}
         dicionario['anotacion'] = entidades
-        dicionario['recursos'] = self.buscaCoincidencias(etiquetas, entidades)
+        dicionario['recursos'] = recomendaciones
         return dicionario
 
     

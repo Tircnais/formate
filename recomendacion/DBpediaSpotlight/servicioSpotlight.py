@@ -17,13 +17,44 @@ class entitiesSpotlight:
         # print('Texto a identificar\n{}'.format(text))
         annotations = ''
         try:
-            annotations = spotlight.annotate('http://api.dbpedia-spotlight.org/en/annotate', text, confidence=0.4, support=20, spotter='Default')
+            # annotations = spotlight.annotate('http://api.dbpedia-spotlight.org/en/annotate', text, confidence=0.4, support=20, spotter='Default')
+            # annotations = requests.get('https://api.dbpedia-spotlight.org/en/candidates?text='+ text +'&'+ confidence=0.35 +'&'+ support=20 +'&'+ spotter="Default")
+            # annotations.headers['application/json']
+
+            ## initial consts
+            BASE_URL = 'http://api.dbpedia-spotlight.org/en/annotate?text={text}&confidence={confidence}&support={support}'
+            TEXT = text
+            CONFIDENCE = '0.35'
+            SUPPORT = '20'
+            REQUEST = BASE_URL.format(
+                text=TEXT, 
+                confidence=CONFIDENCE, 
+                support=SUPPORT)
+            HEADERS = {'Accept': 'application/json'}
+            all_urls = []
+            annotations = requests.get(url=REQUEST, headers=HEADERS)
+            if annotations.status_code == requests.codes['ok']:
+                    response = annotations.json()
+                    resources = response.get('Resources', [])
+                    for res in resources:
+                        # print('URI\t%sLabel\t%s\n' % (res['@URI'], res['@surfaceForm']))
+                        all_urls.append((res['@URI'], res['@surfaceForm']))
+            # print('Result response\n', all_urls)
+            uris = []
+            if all_urls is not None:
+                for elemento in all_urls:
+                    uris.append(elemento)
+                    # uris.append((elemento['URI'], elemento['surfaceForm']))
+                    # uris.append({'URI': elemento['URI'], 'label': elemento['surfaceForm']})
+                uris = list(dict.fromkeys(uris))
+                # Quitar duplicados en la lista
+                # print("TODAS URI\n", uris)
+            else:
+                uris = None
+            return uris
         except ValueError:
             print('la respuesta JSON no se pudo decodificar.')
             # raise ValueError
-        # except spotlight.SpotlightException:
-        #     print('la respuesta JSON no contenía ningún campo necesario o no se formó como una excepción. Olvidó especificar explícitamente un protocolo (http / https) en la URL de la API.')
-        #     raise spotlight.SpotlightException
         except requests.exceptions.HTTPError as err:
             print('Se lanza cuando el código de estado http de respuesta no era 200. Esto podría suceder si tiene un equilibrador de carga como nginx frente a su clúster destacado y no hay un solo servidor disponible, por lo que nginx arroja un 502 Bad Gateway.')
             if err.response.status_code == 403:
@@ -32,23 +63,7 @@ class entitiesSpotlight:
                 raise
         except requests.exceptions.ConnectionError as error:
             print('ConnectionError\n', error)
-
-            # if error.response.status_code == "Connection refused":
-            #     return None
-            # else:
-            #     raise
-        uris = []
-        if annotations is not None:
-            for elemento in annotations:
-                uris.append((elemento['URI'], elemento['surfaceForm']))
-                # uris.append({'URI': elemento['URI'], 'label': elemento['surfaceForm']})
-                # print("similarityScore\n", elemento['similarityScore'])
-                # print("percentageOfSecondRank\n", elemento['percentageOfSecondRank'])
-            uris = list(dict.fromkeys(uris))
-            # Quitar duplicados en la lista
-        else:
-            uris = None
-        return uris
+            return None
 
     
     def textoNivelConfianza(self, text: str, confianza: float):

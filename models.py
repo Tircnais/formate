@@ -103,7 +103,7 @@ class Competenciasusuario(models.Model):
     fkcompetence = models.ForeignKey(Competences, models.DO_NOTHING, db_column='fkcompetence')
     fkuser = models.ForeignKey(User, models.DO_NOTHING, db_column='fkuser')
     tiene = models.BooleanField(blank=True, null=True)
-    recomendacion = models.CharField(max_length=300, blank=True, null=True)
+    recomendacion = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

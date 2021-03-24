@@ -11,7 +11,7 @@
             <select name="select" id="id_fkcompetence">
                 <option value="N/A">Select one</option>
                 {% for detalle in misCompetencias %}
-                    <option value="{{detalle.fkcompetence.pk}}">{{detalle.fkcompetence.namecompetencees}}</option>
+                    <option value="{{detalle.fkcompetence.pk}}">{{detalle.fkcompetence.namecompetenceen}}</option>
                 {% endfor %}
             </select>
             <input type="hidden" name="idUser" id="pkUser" value="{{miUsuario.pk}}">
@@ -114,6 +114,8 @@
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
                 console.log('Cargando recomendacion actual\t', data['recomendadoActual'])
+                reatitulo.innerHTML = '<b>No coincidences</b>';
+                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';
                 reatitulo.innerHTML = '<b>'+data['recomendadoActual']+'</b>';
                 readetalle.innerHTML = '<p class="text-justify">'+data['recomendadoActual']+'</p>';
             }
@@ -183,10 +185,28 @@
                 }else{
                     htmlDigcomp.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vinculacionDigcomp'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vinculacionDigcomp'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vinculacionDigcomp'][2] + finSectionCard + finCardBTitulo + finCard;
                 }
+                
                 // OUT Tab 3
                 // console.log('Recomendacion\t', data['recurso']);
-                reatitulo.innerHTML = '<b>'+data['recurso']+'</b>';
-                readetalle.innerHTML = '<p class="text-justify">'+data['recurso']+'</p>';
+                if (typeof data['recurso'] == 'string'){
+                    // Cuando no hay resultados
+                    reatitulo.innerHTML = '<b>No coincidences</b>';
+                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';
+                }else if(typeof data['recurso'] == 'object'){
+                    // Un solo recurso
+                    reatitulo.innerHTML = '<b>'+data['recurso']['titulo']+'</b>';
+                    readetalle.innerHTML = '<p class="text-justify">'+data['recurso']['enlace']+'</p>';
+                }else{
+                    // Lista recurso
+                    var lista = [];
+                    lista = '<ol>';
+                    for (indice in data) {
+                        lista += '<li>'+data[indice]['titulo']+', ver mas: '+data[indice]['enlace']+'</li>';
+                    }
+                    lista += '<ol>';
+                    reatitulo.innerHTML = '<b>OERs</b>';
+                    readetalle.innerHTML = '<p class="text-justify">'+lista+'</p>';
+                }
             }
         });
     });

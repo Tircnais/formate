@@ -110,8 +110,8 @@ def DetalleCompetencia(request):
         recomendaciones = []
         objectIntegracion = Integracion()
         textoNaturalEnglish = '. '.join(textoNaturalEnglish)
-        print('CD del usuario enviada.\n{}'.format(textoNaturalEnglish))
-        respuestaDiccionario = objectIntegracion.recursoRecomendado(textoNaturalEnglish)
+        print('CD del usuario enviada.\n{}\n\n'.format(textoNaturalEnglish))
+        respuestaDiccionario = objectIntegracion.recursoRecomendado(idUser, idComp, textoNaturalEnglish)
         # Se trae recurso recomendado y entidades (como parte del diccionario)
         anotacionSemantica = respuestaDiccionario['anotacion']
         recomendaciones = respuestaDiccionario['recursos']
@@ -119,13 +119,9 @@ def DetalleCompetencia(request):
         context['anotacion'] = anotacionSemantica
         del objectIntegracion
 
-        # asignacion OER
+        # busca las recomendaciones realizadas
         objectFunciones = Funciones()
-        if len(recomendaciones) > 0:
-            objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
-        else:
-            objectFunciones.update_CompUsuario(idUser, idComp, "Sin resultados")
-        context['recurso'] = objectFunciones.search_CompUsuario(idUser, idComp).recomendacion
+        context['recurso'] = objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
         del objectFunciones
         # Se destruye el objeto con la funcion creada
         # print('context\n', context)

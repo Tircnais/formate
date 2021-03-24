@@ -35,7 +35,7 @@ class entitiesFred:
             }
             ORDER BY ?s
             """
-            print("consultaSparql\t", consultaSparql)
+            # print("consultaSparql\t", consultaSparql)
             results = g.query(consultaSparql)
             # print('Results!')
             for row in results:
@@ -62,7 +62,7 @@ class entitiesFred:
                 for result in results["results"]["bindings"]:
                     uri = result["s"]["value"]
                     label = result["o"]["value"]
-                    print(">>%s: %s" % (uri, label))
+                    print("ServFred>> %s: %s" % (uri, label))
                     entidadesFred.append((uri, label))
         else:
             entidadesFred = None
@@ -79,19 +79,16 @@ class entitiesFred:
         response = None
         try:
             response = requests.get(url, headers = headers)
+            # print("Response:\n{}\n".format(response))
+            code = response.status_code
+            # print('code\t{}'.format(response.content))
+            respuestaFred = self.buscandoEntidades(response.content)
+            # print('content\t{}'.format(respuestaFred))
+            return respuestaFred
         except requests.ConnectionError as err:
             print('exceptions.ConnectionError\n', err)
         except requests.exceptions.ConnectionError as errC:
             print('ConnectionError\n', errC)
-        
-        respuestaFred = None
-        if response is not None:
-            # print("Response:\n{}\n".format(response))
-            code = response.status_code
-            # print('code\t{}'.format(code))
-            respuestaFred = self.buscandoEntidades(response.content)
-            # print('content\t{}'.format(respuestaFred))
-        return respuestaFred
     
     def __del__(self):
         # Destructores, eliminar un objeto simplellamada al método:dell obj (del Objeto)
