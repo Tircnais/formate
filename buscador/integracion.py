@@ -216,7 +216,7 @@ class Integracion:
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
-        print('Cant. sugerencias\n', type(sugerencias))
+        print('Cant. sugerencias\t{}\nTipo retorno\t{}\n'.format(len(sugerencias), type(sugerencias)))
         recomendacionActual = self.castStrToList(recomendacionActual)
         if recomendacionActual == '' or recomendacionActual == 'Sin resultados' or recomendacionActual == None and type(sugerencias) != list:
             recomendaciones = sugerencias
