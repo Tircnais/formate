@@ -14,6 +14,8 @@ from recomendacion.Triplestore.servicioConsulta import entitiesDigcomp
 from recomendacion.Fred.crearRDF import PreparandoArchivos
 # Se importan la funciones creadas
 from .funciones import Funciones
+# usado para convertir el STRING de la BD a list
+import json
 
 class Integracion:
     """Identificando entidades y etiquetando
@@ -138,9 +140,8 @@ class Integracion:
         """
         # print('Etiquetas(Tipo)\tEntidades(Tipo)\n{}\t{}\nEtiquetas\n{}Entidades\n{}'.format(type(etiquetas), type(entidades), etiquetas, entidades))
         recursoRecomendados = []
-        umbral = 0.15
-        # etiqueta = prediccionCD[0]
-        # medicion = prediccionCD[1]
+        umbral = 0.20
+        umbralREA = umbral * 4.65
         for etiqueta, medicion in prediccionCD:
             # print('Prediccion CD\nEtiqueta: %s\tMedicion: %.2f' %(etiqueta, medicion))
             medicion = round(medicion, 2)
@@ -151,18 +152,32 @@ class Integracion:
                     for p_eti, p_med in prediccion:
                         # print("{0} | {1}".format(p_eti, p_med))
                         p_med = round(p_med, 2)
-                        if medicion > umbral and p_med  > umbral:
+                        if medicion >= umbral and p_med >= umbralREA:
+                            # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, p_med))
                             # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
                             recursoRecomendados.append((titulo, enlace))
                 else:
                     # cuando solo hay una prediccion
                     # print("{0} | {1}".format(prediccion[0], prediccion[1]))
                     prediccion = round(prediccion[1], 2)
-                    if medicion > umbral and prediccion  > umbral:
+                    if medicion >= umbral and prediccion >= umbralREA:
+                        # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, prediccion))
                         # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
-                        recursoRecomendados.append({'uri': enlace})
+                        recursoRecomendados.append((titulo, enlace))
         return recursoRecomendados
 
+
+    def castStrToList(self, recuperadoBD: str):
+        texto_json = recuperadoBD.replace('\'', '"').replace('(', '[').replace(')', ']')
+        lista = json.loads(texto_json)
+        castList = []
+        for i in lista:
+            tupla = (i[0], i[1])
+            print('tupla\t ', tupla)
+            castList.append(tupla)
+        print('castList\n', castList)
+        return castList
+    
 
     def recursoRecomendado(self, idUser: int, idComp: int, entradaTexto: list):
         """Busco el recurso que tiene relacion con la competencia digital entrante
@@ -181,7 +196,7 @@ class Integracion:
         # Consulta del Recurso(s) actual(es)
         objectFunciones = Funciones()
         recomendacionActual = objectFunciones.search_CompUsuario(idUser, idComp)
-        print('Recomendacion actual:\n{}'.format(recomendacionActual.recomendacion))
+        # print('Recomendacion actual:\n{}'.format(recomendacionActual.recomendacion))
         recomendacionActual = recomendacionActual.recomendacion
         # Borramos el OBJ para liberar memoria
         del objectFunciones
@@ -201,13 +216,32 @@ class Integracion:
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
-        if recomendacionActual == 'Sin resultados' or recomendacionActual == '' or recomendacionActual == None or len(sugerencias) == 0:
-            # en caso de que no exista recurso/recomendaciones
-            recomendaciones = 'Sin resultados'
+        print('Cant. sugerencias\n', type(sugerencias))
+        recomendacionActual = self.castStrToList(recomendacionActual)
+        if recomendacionActual == '' or recomendacionActual == 'Sin resultados' or recomendacionActual == None and type(sugerencias) != list:
+            recomendaciones = sugerencias
+            # cuando no hay sugerencias previas pero si nuevas
+        elif type(recomendacionActual) == list and type(sugerencias) == list:
+            # cuand hay una lista de sugerencias previas y nuevas
+            recomendaciones = recomendacionActual
+            # for elemento in recomendacionActual:
+            #     recomendaciones.append(elemento)
+            #     # cuando ya hay una lista de recomendaciones previas
+            for elemento in sugerencias:
+                recomendaciones.append(elemento)
+                # cuando ya hay una lista de recomendaciones nuevas
+        elif type(recomendacionActual) != list:
+            # cuando hay una sola recomendacion y una lista de sugerencias
+            recomendaciones.append(recomendacionActual)
+            for elemento in sugerencias:
+                recomendaciones.append(elemento)
+                # cuando ya hay una lista de recomendaciones nuevas
         else:
+            # si hay una sugerencia previa y una sola sugerencia
             recomendaciones.append(recomendacionActual)
             recomendaciones.append(sugerencias)
-            # agrega a la lista los nuevos recursos
+        
+        # print('Recomendaciones\n', recomendaciones)
         recomendaciones = list(dict.fromkeys(recomendaciones))
         # Quitar duplicados en la lista
         dicionario = {}

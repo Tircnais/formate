@@ -38,14 +38,15 @@ def listadoRecursos(request):
     # http://localhost:7200/resource?uri=http:%2F%2Flocalhost:7200%2Foer%2Frecursos%2F1062
     return render(request, "tables.html", cntxtREA)
 
-
-def detalleRecurso(request, enlace):
+def detalleRecurso(request):
+    uri = request.GET['uri']
     # enlace Recurso
     servicioConsultas = entitiesDigcomp()
     # se llama al servicio
-    reaConsultado = servicioConsultas.recursoDetallado(enlace)
+    reaConsultado = servicioConsultas.recursoDetallado(uri)
+    # uri = 'http://localhost:7200/oer/recursos/'+ uri
     cntxtREA = {
-        'recurso': recurso
+        'recurso': reaConsultado
     }
     del servicioConsultas
     return render(request, "recursoDetallado.html", cntxtREA)
@@ -72,7 +73,30 @@ def cargandoRecurso(request):
         # valor que se toma del ajax seccion data
         idUser = request.GET['pkUser']
         recursoRecomendado = Competenciasusuario.objects.get(fkcompetence=idComp, fkuser= idUser).recomendacion
-        context['recomendadoActual'] = recursoRecomendado
+        objectIntegracion = Integracion()
+        recursoRecomendado = objectIntegracion.castStrToList(recursoRecomendado)
+        del objectIntegracion
+        sugerenciasPrevias = []
+        infoREA = dict()
+        print('VIEW Sugerencia actual\n',recursoRecomendado)
+        print('VIEW Tipo de dato que regresa\n', type(recursoRecomendado))
+        if (recursoRecomendado == '' or recursoRecomendado == None or type(recursoRecomendado) == 'str'):
+            # no hay sugerencias previas
+            # sugerenciasPrevias = infoREA = {'title': 'OERs', 'uri': 'Not availables'}
+            sugerenciasPrevias = None
+        elif (type(recursoRecomendado) == 'list'):
+            # lista de sugerencias
+            for rea in recursoRecomendado:
+                print('Recurso\n{} - {}'.format(rea[0], rea[1]))
+                # infoREA = {'title': rea[0], 'uri': rea[1]}
+                # sugerenciasPrevias.append(infoREA)
+                sugerenciasPrevias.append((rea[0], rea[1]))
+        else:
+            # una sola sugerencia
+            # infoREA = {'title': recursoRecomendado[0], 'uri': recursoRecomendado[1]}
+            # sugerenciasPrevias.append(infoREA)
+            sugerenciasPrevias.append((recursoRecomendado[0], recursoRecomendado[1]))
+        context['recurso'] = sugerenciasPrevias
         return JsonResponse(context, safe=False)
 
 
@@ -121,7 +145,23 @@ def DetalleCompetencia(request):
 
         # busca las recomendaciones realizadas
         objectFunciones = Funciones()
-        context['recurso'] = objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
+        listaSugerencias = objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
+        sugerencias = []
+        infoREA = dict()
+        if (listaSugerencias == '' or listaSugerencias == None or type(listaSugerencias) == 'str'):
+            # no hay sugerencias previas
+            sugerencias = infoREA = {'title': 'OERs', 'uri': 'Not availables'}
+        elif (type(listaSugerencias) == 'list'):
+            # lista de sugerencias
+            for rea in listaSugerencias:
+                print('Recurso\n{} - {}'.format(rea[0], rea[1]))
+                infoREA = {'title': rea[0], 'uri': rea[1]}
+                sugerencias.append(infoREA)
+        else:
+            # una sola sugerencia
+            infoREA = {'title': listaSugerencias[0], 'uri': listaSugerencias[1]}
+            sugerencias.append(infoREA)
+        context['recurso'] = sugerencias
         del objectFunciones
         # Se destruye el objeto con la funcion creada
         # print('context\n', context)

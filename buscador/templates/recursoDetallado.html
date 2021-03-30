@@ -11,10 +11,11 @@
             <li class="breadcrumb-item active">OER</li>
         </ol>
         <div class="card mb-4">
-            <div class="card-body">OER available in triplet format, if you want to expand this repository, you should review the storage of the same.</div>
+            <div class="card-body">Detail of the requested resource.</div>
         </div>
         <div class="card mb-4">
             <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable OER</div>
+            <p>{{recursos}}</p>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -22,22 +23,20 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Category</th>
-                                <th>View</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
                                 <th>Title</th>
                                 <th>Category</th>
-                                <th>View</th>
                             </tr>
                         </tfoot>
                         <tbody>
                             {% for recurso in recursos %}
                                 <tr>
-                                    <td>{{recurso.titulo}}</td>
-                                    <td>{{recurso.categoria}}</td>
-                                    <td><a href="{{recurso.enlace}}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail" role="button">More information</a></td>
+                                    <td>{{recurso.predicado}}</td>
+                                    <td>{{recurso.objeto}}</td>
+                                    <td><a href="{{recurso.objeto}}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail" role="button">More information</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -48,6 +47,10 @@
     </div>
 {% endblock %}
 {% block script %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    {% comment %} <script src="{% static 'assets/demo/datatables-demo.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="assets/demo/datatables-demo.js"></script>     {% endcomment %}
 {% endblock %}

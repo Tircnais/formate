@@ -18,8 +18,8 @@ class entitiesFred:
                 temp.write(mydata)
                 temp.seek(0)
                 mydata = temp.read()
-                print('Nomb temp\t',temp.name)
-                print('mydata\n',mydata)
+                print('Nomb temp\t',temp)
+                # print('mydata\n',mydata)
                 try:
                     # g.parse(data=mydata, format="n3")
                     g.parse(data=mydata, format="application/rdf+xml")
