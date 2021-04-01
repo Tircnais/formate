@@ -78,25 +78,22 @@ def cargandoRecurso(request):
         del objectIntegracion
         sugerenciasPrevias = []
         infoREA = dict()
-        print('VIEW Sugerencia actual\n',recursoRecomendado)
-        print('VIEW Tipo de dato que regresa\n', type(recursoRecomendado))
-        if (recursoRecomendado == '' or recursoRecomendado == None or type(recursoRecomendado) == 'str'):
+        print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
+        print('Sug. Previas\n',recursoRecomendado)
+
+        if(recursoRecomendado == '' or recursoRecomendado == None or type(recursoRecomendado) == 'str' or len(recursoRecomendado) == 0):
             # no hay sugerencias previas
-            # sugerenciasPrevias = infoREA = {'title': 'OERs', 'uri': 'Not availables'}
             sugerenciasPrevias = None
         elif (type(recursoRecomendado) == 'list'):
             # lista de sugerencias
             for rea in recursoRecomendado:
                 print('Recurso\n{} - {}'.format(rea[0], rea[1]))
-                # infoREA = {'title': rea[0], 'uri': rea[1]}
-                # sugerenciasPrevias.append(infoREA)
                 sugerenciasPrevias.append((rea[0], rea[1]))
         else:
             # una sola sugerencia
-            # infoREA = {'title': recursoRecomendado[0], 'uri': recursoRecomendado[1]}
-            # sugerenciasPrevias.append(infoREA)
             sugerenciasPrevias.append((recursoRecomendado[0], recursoRecomendado[1]))
         context['recurso'] = sugerenciasPrevias
+        print('VIIEW Salida Tipo\t{}'.format(type(sugerenciasPrevias), len(sugerenciasPrevias)))
         return JsonResponse(context, safe=False)
 
 
@@ -146,23 +143,23 @@ def DetalleCompetencia(request):
         # busca las recomendaciones realizadas
         objectFunciones = Funciones()
         listaSugerencias = objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
+        del objectFunciones
         sugerencias = []
         infoREA = dict()
-        if (listaSugerencias == '' or listaSugerencias == None or type(listaSugerencias) == 'str'):
+        if (listaSugerencias == '' or listaSugerencias == None or type(listaSugerencias) == 'str' or len(listaSugerencias) == 0):
             # no hay sugerencias previas
-            sugerencias = infoREA = {'title': 'OERs', 'uri': 'Not availables'}
+            sugerencias = None
+            print('VIIEW Tipo dato sug:]t', type(sugerencias))
         elif (type(listaSugerencias) == 'list'):
             # lista de sugerencias
             for rea in listaSugerencias:
                 print('Recurso\n{} - {}'.format(rea[0], rea[1]))
-                infoREA = {'title': rea[0], 'uri': rea[1]}
-                sugerencias.append(infoREA)
+                listaSugerencias.append((rea[0], rea[1]))
         else:
             # una sola sugerencia
-            infoREA = {'title': listaSugerencias[0], 'uri': listaSugerencias[1]}
-            sugerencias.append(infoREA)
+            print('VIIEW Tipo de dato\t', type(listaSugerencias))
+            sugerencias.append((listaSugerencias[0], listaSugerencias[1]))
         context['recurso'] = sugerencias
-        del objectFunciones
         # Se destruye el objeto con la funcion creada
         # print('context\n', context)
         return JsonResponse(context, safe=False)

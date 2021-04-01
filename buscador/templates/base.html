@@ -109,28 +109,30 @@
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recurso'];
                 // console.log('Cargando recomendacion actual\t', sugerencias);
-                console.log('Tipo de dato: ', typeof(sugerencias));
+                console.info('Recomendaciones\n', sugerencias);
+                console.log('Base ->Tipo de dato:\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     reatitulo.innerHTML = '<b>No coincidences</b>';
                     readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';    
                     // Cuando no hay resultados
                 }else if(typeof sugerencias == 'object'){
                     // Un solo recurso
-                    console.log('Retorno\n', sugerencias);
+                    console.log('Retorno\t', sugerencias);
                     var lista = [];
                     lista = '<ol>';
-                    console.log(sugerencias[0]);
+                    console.log(sugerencias[0][0]);
                     for (indice in sugerencias) {
-                        console.log(sugerencias[indice][0][0][0]);
-                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">Ver mas</a></li>';
+                        console.log('Recurso\t', sugerencias[indice][0][0], ' - ', sugerencias[indice][0][1]);
+                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">See more</a></li>';
                     }
                     lista += '<ol>';
-                    reatitulo.innerHTML = '<b>OERs</b>';
-                    readetalle.innerHTML = '<p class="text-justify">'+lista+'</p>';
+                    reatitulo.innerHTML = '<b>Recommendations</b>';
+                    readetalle.innerHTML = lista;
+                    // readetalle.innerHTML = '<section class="text-justify">'+lista+'</section>';
                 }else{
                     // Un solo recurso
-                    reatitulo.innerHTML = '<b>'+sugerencias['title']+'</b>';
-                    readetalle.innerHTML = '<p class="text-justify">'+sugerencias['uri']+'</p>';
+                    reatitulo.innerHTML = '<b>Recommendation</b>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0][0]+'</b> - <a href="'+sugerencias[0][1]+'">See more</a>';
                 }
             }
         });
@@ -213,15 +215,15 @@
                     lista = '<ol>';
                     for (indice in sugerencias) {
                         console.log(sugerencias[indice][0][0][0]);
-                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">Ver mas</a></li>';
+                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">See more</a></li>';
                     }
                     lista += '<ol>';
-                    reatitulo.innerHTML = '<b>OERs</b>';
+                    reatitulo.innerHTML = '<b>Recommendations</b>';
                     readetalle.innerHTML = '<p class="text-justify">'+lista+'</p>';
                 }else{
                     // Un solo recurso
-                    reatitulo.innerHTML = '<b>'+sugerencias['title']+'</b>';
-                    readetalle.innerHTML = '<p class="text-justify">'+sugerencias['uri']+'</p>';
+                    reatitulo.innerHTML = '<b>Recommendation</b>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0][0]+'</b> - <a href="'+sugerencias[0][1]+'">See more</a>';
                 }
             }
         });

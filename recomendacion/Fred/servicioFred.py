@@ -18,12 +18,11 @@ class entitiesFred:
                 temp.write(mydata)
                 temp.seek(0)
                 mydata = temp.read()
-                print('Nomb temp\t',temp)
+                print('Servicio FRED temp.name:\t',temp.name)
                 # print('mydata\n',mydata)
                 try:
                     # g.parse(data=mydata, format="n3")
                     g.parse(data=mydata, format="application/rdf+xml")
-                    # g.parse(location=temp.name, format="application/rdf+xml")
                 except Exception:
                     raise Exception("Unexpected type '%s' for source '%s'" % (type(mydata), mydata))
             
@@ -87,8 +86,12 @@ class entitiesFred:
             return respuestaFred
         except requests.ConnectionError as err:
             print('exceptions.ConnectionError\n', err)
+            return 'err\t',err
         except requests.exceptions.ConnectionError as errC:
             print('ConnectionError\n', errC)
+            return 'errC\t',errC
+        except Exception as e:
+            return 'e\t',e
     
     def __del__(self):
         # Destructores, eliminar un objeto simplellamada al método:dell obj (del Objeto)

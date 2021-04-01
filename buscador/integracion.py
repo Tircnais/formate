@@ -168,15 +168,33 @@ class Integracion:
 
 
     def castStrToList(self, recuperadoBD: str):
-        texto_json = recuperadoBD.replace('\'', '"').replace('(', '[').replace(')', ']')
-        lista = json.loads(texto_json)
+        """Convierte la cadena guardada en BD a una lista para poder trabajar mejor
+
+        Args:
+            recuperadoBD (str): Sugerencias guardadas en BD
+
+        Returns:
+            list: Recurso asignados
+        """
         castList = []
-        for i in lista:
-            tupla = (i[0], i[1])
-            print('tupla\t ', tupla)
-            castList.append(tupla)
-        print('castList\n', castList)
-        return castList
+        if(recuperadoBD == '' or recuperadoBD == None):
+            return castList
+        else:
+            # print('TIPO entrante\t{}\nRecuperado\n{}\n\n\n'.format(type(recuperadoBD), recuperadoBD))
+            texto_json = recuperadoBD.replace('\'', '"')
+            texto_json = texto_json[1:len(texto_json)-1]
+            texto_json = texto_json.split('), (')
+            # jsonlista = list(texto_json)
+            # .replace('(', '[').replace(')', ']')
+            print("Tipo de dato\t", type(texto_json))
+            for a in texto_json:
+                a = a.split('", "')
+                i = a[0].replace('"', '').replace('(', '').replace('\'', '"') # titulo
+                j = a[1].replace('"', '').replace(')', '').replace('\'', '"') # uri
+                tupla = (i, j)
+                # print('tupla\t', tupla)
+                castList.append(tupla)
+            return castList
     
 
     def recursoRecomendado(self, idUser: int, idComp: int, entradaTexto: list):
@@ -244,6 +262,8 @@ class Integracion:
         # print('Recomendaciones\n', recomendaciones)
         recomendaciones = list(dict.fromkeys(recomendaciones))
         # Quitar duplicados en la lista
+        # recomendaciones = json.dumps(recomendaciones)
+        # cast to JSON
         dicionario = {}
         dicionario['anotacion'] = entidades
         dicionario['recursos'] = recomendaciones
