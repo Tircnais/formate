@@ -72,28 +72,66 @@ def cargandoRecurso(request):
         idComp = request.GET['fkCompetencia']
         # valor que se toma del ajax seccion data
         idUser = request.GET['pkUser']
+        infoCompetencia = Competences.objects.get(idcompetence=idComp)
+        fkArea = infoCompetencia.fkarea
+        infoArea = Areas.objects.get(idarea = int(fkArea.idarea))
+
+        ### TAB 1
+        area = infoArea.nameareaen
+        descripcion = infoCompetencia.descriptioncompetenceen
+        context['infoArea']= area
+        context['infoCompetencia']= descripcion
+
+        ### TAB 2
+        textoNaturalEnglish = []
+        fkArea = infoCompetencia.fkarea
+        infoArea = Areas.objects.get(idarea = int(fkArea.idarea))
+        # se trae el nombre del Area en ingles
+        textoNaturalEnglish.append(infoArea.nameareaen)
+        # se trae el nombre del Competencia en ingles
+        textoNaturalEnglish.append(infoCompetencia.namecompetenceen)
+        # se trae el descripcion del Competencia en ingles
+        textoNaturalEnglish.append(infoCompetencia.descriptioncompetenceen)
+        objectIntegracion = Integracion()
+        textoNaturalEnglish = '. '.join(textoNaturalEnglish)
+        anotacionSemantica = objectIntegracion.entidadesEncontradas(textoNaturalEnglish)
+        del objectIntegracion
+        print('CD del usuario enviada.\n{}\n\n'.format(textoNaturalEnglish))
+        context['anotacion'] = anotacionSemantica
+        
+        ### TAB 3
         recursoRecomendado = Competenciasusuario.objects.get(fkcompetence=idComp, fkuser= idUser).recomendacion
         objectIntegracion = Integracion()
         recursoRecomendado = objectIntegracion.castStrToList(recursoRecomendado)
         del objectIntegracion
         sugerenciasPrevias = []
-        infoREA = dict()
-        print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
-        print('Sug. Previas\n',recursoRecomendado)
-
-        if(recursoRecomendado == '' or recursoRecomendado == None or type(recursoRecomendado) == 'str' or len(recursoRecomendado) == 0):
+        if(recursoRecomendado == '' or recursoRecomendado == None or len(recursoRecomendado) == 0):
             # no hay sugerencias previas
             sugerenciasPrevias = None
-        elif (type(recursoRecomendado) == 'list'):
-            # lista de sugerencias
-            for rea in recursoRecomendado:
-                print('Recurso\n{} - {}'.format(rea[0], rea[1]))
-                sugerenciasPrevias.append((rea[0], rea[1]))
+            print('Sug. Previas\n', recursoRecomendado)
         else:
-            # una sola sugerencia
-            sugerenciasPrevias.append((recursoRecomendado[0], recursoRecomendado[1]))
+            # si hay sugerencias previas
+            print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
+            for uri in recursoRecomendado:
+                # print('VIEW recurso\t', uri)
+                objEntidades = entitiesDigcomp()
+                recurso = objEntidades.recursoDetallado(uri)
+                # se obtiene el detalle como lista, cada elemento es un diccionario
+                del objEntidades
+                # elimina el obj creado para liberar memoria
+                coincidencia = False
+                for detalle in recurso:
+                    for clave, valor in detalle.items():
+                        if(clave == 'Title' or clave == 'title' or clave == 'ttitle'):
+                            # print('>>', clave, valor)
+                            sugerenciasPrevias.append((valor, uri))
+                            # si es el titulo se agrega a la lista
+                            coincidencia = True
+                            break
+                            # encuentra una coicidencia pasa al siguiente recurso
+                    if coincidencia:
+                        break
         context['recurso'] = sugerenciasPrevias
-        print('VIIEW Salida Tipo\t{}'.format(type(sugerenciasPrevias), len(sugerenciasPrevias)))
         return JsonResponse(context, safe=False)
 
 
@@ -113,53 +151,65 @@ def DetalleCompetencia(request):
     '''
     if request.is_ajax() == True:
         context ={}
-        textoNaturalEnglish = []
         idComp = request.GET['fkCompetencia']
         # valor que se toma del ajax seccion data
         idUser = request.GET['pkUser']
         infoCompetencia = Competences.objects.get(idcompetence=idComp)
+
+        ### TAB 2
+        textoNaturalEnglish = []
         fkArea = infoCompetencia.fkarea
         infoArea = Areas.objects.get(idarea = int(fkArea.idarea))
-        context['infoArea']= infoArea.nameareaes
-        context['infoCompetencia']= infoCompetencia.descriptioncompetencees
         # se trae el nombre del Area en ingles
         textoNaturalEnglish.append(infoArea.nameareaen)
         # se trae el nombre del Competencia en ingles
         textoNaturalEnglish.append(infoCompetencia.namecompetenceen)
         # se trae el descripcion del Competencia en ingles
         textoNaturalEnglish.append(infoCompetencia.descriptioncompetenceen)
+        textoNaturalEnglish = '. '.join(textoNaturalEnglish)
+        objectIntegracion = Integracion()
+        anotacionSemantica = objectIntegracion.entidadesEncontradas(textoNaturalEnglish)
+        del objectIntegracion
+        context['anotacion'] = anotacionSemantica
+        
+        ### TAB 3
         recomendaciones = []
         objectIntegracion = Integracion()
-        textoNaturalEnglish = '. '.join(textoNaturalEnglish)
-        print('CD del usuario enviada.\n{}\n\n'.format(textoNaturalEnglish))
         respuestaDiccionario = objectIntegracion.recursoRecomendado(idUser, idComp, textoNaturalEnglish)
         # Se trae recurso recomendado y entidades (como parte del diccionario)
-        anotacionSemantica = respuestaDiccionario['anotacion']
         recomendaciones = respuestaDiccionario['recursos']
         # print('Anotacion semantica\n{}\n'.format(anotacionSemantica))
         context['anotacion'] = anotacionSemantica
         del objectIntegracion
 
-        # busca las recomendaciones realizadas
         objectFunciones = Funciones()
         listaSugerencias = objectFunciones.update_CompUsuario(idUser, idComp, recomendaciones)
         del objectFunciones
+        
         sugerencias = []
-        infoREA = dict()
-        if (listaSugerencias == '' or listaSugerencias == None or type(listaSugerencias) == 'str' or len(listaSugerencias) == 0):
+        objEntidades = entitiesDigcomp()
+        for uri in listaSugerencias:
+            print('VIEW recurso\t', uri)
+            recurso = objEntidades.recursoDetallado(uri)
+            # se obtiene el detalle como lista, cada elemento es un diccionario
+            coincidencia = False
+            for detalle in recurso:
+                for clave, valor in detalle.items():
+                    if(clave == 'Title' or clave == 'title' or clave == 'ttitle'):
+                        # print('>>', clave, valor)
+                        sugerencias.append((valor, uri))
+                        # si es el titulo se agrega a la list
+                        coincidencia = True
+                        # encuentra una coicidencia pasa al siguiente recurso
+                        break
+                if coincidencia:
+                    break
+        del objEntidades
+
+        if (sugerencias == '' or sugerencias == None or type(sugerencias) == 'str' or len(sugerencias) == 0):
             # no hay sugerencias previas
             sugerencias = None
-            print('VIIEW Tipo dato sug:]t', type(sugerencias))
-        elif (type(listaSugerencias) == 'list'):
-            # lista de sugerencias
-            for rea in listaSugerencias:
-                print('Recurso\n{} - {}'.format(rea[0], rea[1]))
-                listaSugerencias.append((rea[0], rea[1]))
-        else:
-            # una sola sugerencia
-            print('VIIEW Tipo de dato\t', type(listaSugerencias))
-            sugerencias.append((listaSugerencias[0], listaSugerencias[1]))
         context['recurso'] = sugerencias
         # Se destruye el objeto con la funcion creada
-        # print('context\n', context)
+        print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(sugerencias), len(sugerencias)))
         return JsonResponse(context, safe=False)

@@ -14,22 +14,23 @@ from recomendacion.Triplestore.servicioConsulta import entitiesDigcomp
 from recomendacion.Fred.crearRDF import PreparandoArchivos
 # Se importan la funciones creadas
 from .funciones import Funciones
-# usado para convertir el STRING de la BD a list
-import json
+
 
 class Integracion:
-    """Identificando entidades y etiquetando
-    """
+    '''
+        `Identificando entidades y etiquetando
+    '''
 
-    def etiquetandoTexto(self, entradaTexto: str):
-        """Etiquetando texto para ello se emplea la lib FastText
+    def prediccionTexto(self, entradaTexto: str):
+        '''
+            Prediccion de texto para ello se emplea la lib FastText
 
-        Args:
-            entradaTexto (str): Competencia digital entrante
+            Args:
+                entradaTexto (str): Competencia digital entrante
 
-        Returns:
-            list: Con las predicciones o etiquetas dadas a la Competencia digital
-        """
+            Returns:
+                list: Con las predicciones o etiquetas dadas a la Competencia digital
+        '''
         etiquetas = []
         ft = generarModelo()
         # # # Implementando fastText
@@ -46,19 +47,21 @@ class Integracion:
 
 
     def vinculandoEntidades(self, detalle: str, entidades: list):
-        """Vinculación de entidad con nombre (sus siglas en ingles (NEL).NEL asignará una identidad única a las entidades mencionadas en el texto. En otras palabras, NEL es la tarea de vincular las menciones de entidades en el texto con sus entidades correspondientes en una base de conocimiento.
+        '''
+            Vinculación de entidad con nombre (sus siglas en ingles (NEL).NEL asignará una identidad única a las entidades mencionadas en el texto. En otras palabras, NEL es la tarea de vincular las menciones de entidades en el texto con sus entidades correspondientes en una base de conocimiento.
 
-        Args:
-            detalle (str): Cadena/oracion a analizar
-            entidades (list): Lista de entidades con la URI correspondiente
+            Args:
+                detalle (str): Cadena/oracion a analizar
+                entidades (list): Lista de entidades con la URI correspondiente
 
-        Returns:
-            list: Cadena/oracion con la vinculacion realizada
-        """
+            Returns:
+                list: Cadena/oracion con la vinculacion realizada
+        '''
         enlazandoEntidades = []
         detalle = detalle.split(". ")
         # print("Recibiendo datos a vincular\t", detalle)
         for oracion in detalle:
+            # print('entidades\t', entidades)
             for uri, label in entidades:
                 # reversed(list) orden descendente
                 # print("Oracion\n{}\nURI\t{}\tlabel\n{}\n".format(oracion, uri, label))
@@ -75,15 +78,16 @@ class Integracion:
         return enlazandoEntidades
 
     def entidadesEncontradas(self, entradaTexto: str):
-        """Reconocimiento de entidad nombrada (sus sgilas en ingles NER).NER nos dirá qué palabras son entidades y cuáles son sus tipos. En resumen se identifica las entidades del texto entrante.
-        
+        '''
+            Reconocimiento de entidad nombrada (sus sgilas en ingles NER).NER nos dirá qué palabras son entidades y cuáles son sus tipos. En resumen se identifica las entidades del texto entrante.
+            
 
-        Args:
-            entradaTexto (str): Competencia digital a analizar
+            Args:
+                entradaTexto (str): Competencia digital a analizar
 
-        Returns:
-            list: Lista de entidades identificadas
-        """
+            Returns:
+                list: Lista de entidades identificadas
+        '''
         dictionarioEntidades = {}
         # Implementando DBpedia y Fred
         # Reconocimiento de entidades DBpedia Spotlight
@@ -128,16 +132,17 @@ class Integracion:
     
     # se compara consigo mismo, no con el triplestore
     def buscaCoincidencias(self, prediccionCD: list, recursos: list):
-        """Compara la prediccion de la CD con c/u de los REA encontrados. Al superar el umbral establecido lo agrega a la lista. Esta lista es usara para asignar el RECURSO.
-        
+        '''
+            Compara la prediccion de la CD con c/u de los REA encontrados. Al superar el umbral establecido lo agrega a la lista. Esta lista es usara para asignar el RECURSO.
+            
 
-        Args:
-            prediccionCD (list): LISTA de etiquetas percibidas por fastText
-            recursos (list): LISTA de REA encontradas
+            Args:
+                prediccionCD (list): LISTA de etiquetas percibidas por fastText
+                recursos (list): LISTA de REA encontradas
 
-        Returns:
-            list: Lista de coincidencias.
-        """
+            Returns:
+                list: Lista de coincidencias.
+        '''
         # print('Etiquetas(Tipo)\tEntidades(Tipo)\n{}\t{}\nEtiquetas\n{}Entidades\n{}'.format(type(etiquetas), type(entidades), etiquetas, entidades))
         recursoRecomendados = []
         umbral = 0.20
@@ -155,7 +160,8 @@ class Integracion:
                         if medicion >= umbral and p_med >= umbralREA:
                             # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, p_med))
                             # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
-                            recursoRecomendados.append((titulo, enlace))
+                            # recursoRecomendados.append((titulo, enlace))
+                            recursoRecomendados.append(enlace)
                 else:
                     # cuando solo hay una prediccion
                     # print("{0} | {1}".format(prediccion[0], prediccion[1]))
@@ -163,53 +169,45 @@ class Integracion:
                     if medicion >= umbral and prediccion >= umbralREA:
                         # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, prediccion))
                         # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
-                        recursoRecomendados.append((titulo, enlace))
+                        # recursoRecomendados.append((titulo, enlace))
+                        recursoRecomendados.append(enlace)
         return recursoRecomendados
 
 
     def castStrToList(self, recuperadoBD: str):
-        """Convierte la cadena guardada en BD a una lista para poder trabajar mejor
+        '''
+            Convierte la cadena guardada en BD a una lista para poder trabajar mejor
 
-        Args:
-            recuperadoBD (str): Sugerencias guardadas en BD
+            Args:
+                recuperadoBD (str): Sugerencias guardadas en BD
 
-        Returns:
-            list: Recurso asignados
-        """
-        castList = []
+            Returns:
+                list: Recurso asignados
+        '''
+        # print('Recursos recuperados\t', recuperadoBD)
         if(recuperadoBD == '' or recuperadoBD == None):
-            return castList
+            return recuperadoBD
         else:
-            # print('TIPO entrante\t{}\nRecuperado\n{}\n\n\n'.format(type(recuperadoBD), recuperadoBD))
-            texto_json = recuperadoBD.replace('\'', '"')
-            texto_json = texto_json[1:len(texto_json)-1]
-            texto_json = texto_json.split('), (')
-            # jsonlista = list(texto_json)
-            # .replace('(', '[').replace(')', ']')
-            print("Tipo de dato\t", type(texto_json))
-            for a in texto_json:
-                a = a.split('", "')
-                i = a[0].replace('"', '').replace('(', '').replace('\'', '"') # titulo
-                j = a[1].replace('"', '').replace(')', '').replace('\'', '"') # uri
-                tupla = (i, j)
-                # print('tupla\t', tupla)
-                castList.append(tupla)
-            return castList
-    
+            texto_json = recuperadoBD.replace('\'', '"').replace('"', '')
+            texto_json = texto_json[0:len(texto_json)]
+            texto_json = texto_json.split(', ')
+            texto_json[0] = texto_json[0].replace('[', '')
+            texto_json[len(texto_json)-1] = texto_json[len(texto_json)-1].replace(']', '')
+            # print("Tipo de dato\t{}\nRecomendaciones\n{}\n".format(type(texto_json), texto_json))
+            return texto_json
 
     def recursoRecomendado(self, idUser: int, idComp: int, entradaTexto: list):
-        """Busco el recurso que tiene relacion con la competencia digital entrante
+        '''
+            Busco el recurso que tiene relacion con la competencia digital entrante
 
-        Args:
-            entradaTexto (list): Competencia digital entrante
+            Args:
+                entradaTexto (list): Competencia digital entrante
 
-        Returns:
-            list: Recurso con relevancia
-        """
+            Returns:
+                list: Recurso con relevancia
+        '''
         # fastText Etiquetas y Entidades de la CD seleccionada
-        prediconCD = self.etiquetandoTexto(entradaTexto)
-        # Anotacion semantica con los diversos servicios/vocab
-        entidades = self.entidadesEncontradas(entradaTexto)
+        prediconCD = self.prediccionTexto(entradaTexto)
         
         # Consulta del Recurso(s) actual(es)
         objectFunciones = Funciones()
@@ -229,43 +227,34 @@ class Integracion:
         listaREA = []
         for oer in reas:
             # print('>>{}\n'.format(oer))
-            prediccionREA = self.etiquetandoTexto(oer['titulo']+' '+oer['categoria'])
+            prediccionREA = self.prediccionTexto(oer['titulo']+' '+oer['categoria'])
             listaREA.append((oer['titulo'], oer['enlace'], prediccionREA))
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
         print('Cant. sugerencias\t{}\nTipo retorno\t{}\n'.format(len(sugerencias), type(sugerencias)))
-        recomendacionActual = self.castStrToList(recomendacionActual)
-        if recomendacionActual == '' or recomendacionActual == 'Sin resultados' or recomendacionActual == None and type(sugerencias) != list:
-            recomendaciones = sugerencias
+        # recomendacionActual = self.castStrToList(recomendacionActual)
+        if recomendacionActual == '' or recomendacionActual == None:
             # cuando no hay sugerencias previas pero si nuevas
-        elif type(recomendacionActual) == list and type(sugerencias) == list:
+            print('Integracion if 1')
+            recomendaciones = sugerencias
+            #  and type(sugerencias) = 'NoneType'
+        elif type(recomendacionActual) == list or type(sugerencias) == list:
             # cuand hay una lista de sugerencias previas y nuevas
-            recomendaciones = recomendacionActual
-            # for elemento in recomendacionActual:
-            #     recomendaciones.append(elemento)
-            #     # cuando ya hay una lista de recomendaciones previas
-            for elemento in sugerencias:
+            print('Integracion if 2')
+            for elemento in recomendacionActual:
                 recomendaciones.append(elemento)
-                # cuando ya hay una lista de recomendaciones nuevas
-        elif type(recomendacionActual) != list:
-            # cuando hay una sola recomendacion y una lista de sugerencias
-            recomendaciones.append(recomendacionActual)
             for elemento in sugerencias:
                 recomendaciones.append(elemento)
                 # cuando ya hay una lista de recomendaciones nuevas
         else:
             # si hay una sugerencia previa y una sola sugerencia
-            recomendaciones.append(recomendacionActual)
+            print('Integracion else')
             recomendaciones.append(sugerencias)
         
-        # print('Recomendaciones\n', recomendaciones)
         recomendaciones = list(dict.fromkeys(recomendaciones))
         # Quitar duplicados en la lista
-        # recomendaciones = json.dumps(recomendaciones)
-        # cast to JSON
         dicionario = {}
-        dicionario['anotacion'] = entidades
         dicionario['recursos'] = recomendaciones
         return dicionario
 

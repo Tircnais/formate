@@ -30,7 +30,7 @@
             </ul>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-detalle" role="tabpanel" aria-labelledby="nav-dbpedia-tab">
-                    <div class="card-header" id="nombre_area">Select first</div>
+                    <div class="card-header" id="nombre_area">Select a digital competition to see the detail</div>
                     <div class="card-body">
                         <h5 class="card-title">
                             <input type="checkbox" id="siTiene" disabled="True">
@@ -75,9 +75,9 @@
                 <div class="tab-pane fade" id="nav-asignado" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <div class="card-header" id="recomendado"><b>Open Educational Resource</b></div>
                     <div class="card-body">
-                        <h5 class="card-title" id="nombRecurso">Searching</h5>
+                        <h5 class="card-title" id="nombRecurso">You must choose a digital competition</h5>
                         <section class="card-text" id="recomendacion">
-                            <p class='text-justify'>Wait ... looking</p>
+                            <p class='text-justify'>Select a digital competition to see the detail</p>
                         </section>
                     </div>
                 </div>
@@ -94,56 +94,6 @@
         var pkUser = $("#pkUser").val();
         // console.log('pkUser\t', pkUser);
         var board_url = "{%  url 'ajaxMuestraRecurso' %}";
-        $.ajax({
-            // initialize an AJAX request      
-            url: board_url,
-            type: "GET",
-            data: {
-                'fkCompetencia': fkCompetencia,
-                'pkUser': pkUser,
-            },
-            datatype:'json',
-            success: function(data) {
-                // TAB 3
-                var reatitulo = document.getElementById("nombRecurso");
-                var readetalle = document.getElementById("recomendacion");
-                sugerencias = data['recurso'];
-                // console.log('Cargando recomendacion actual\t', sugerencias);
-                console.info('Recomendaciones\n', sugerencias);
-                console.log('Base ->Tipo de dato:\t', typeof(sugerencias));
-                if(sugerencias == null || typeof(sugerencias)== 'string'){
-                    reatitulo.innerHTML = '<b>No coincidences</b>';
-                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';    
-                    // Cuando no hay resultados
-                }else if(typeof sugerencias == 'object'){
-                    // Un solo recurso
-                    console.log('Retorno\t', sugerencias);
-                    var lista = [];
-                    lista = '<ol>';
-                    console.log(sugerencias[0][0]);
-                    for (indice in sugerencias) {
-                        console.log('Recurso\t', sugerencias[indice][0][0], ' - ', sugerencias[indice][0][1]);
-                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">See more</a></li>';
-                    }
-                    lista += '<ol>';
-                    reatitulo.innerHTML = '<b>Recommendations</b>';
-                    readetalle.innerHTML = lista;
-                    // readetalle.innerHTML = '<section class="text-justify">'+lista+'</section>';
-                }else{
-                    // Un solo recurso
-                    reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0][0]+'</b> - <a href="'+sugerencias[0][1]+'">See more</a>';
-                }
-            }
-        });
-    });
-
-    $("#id_fkcompetence").change(function () {
-        var fkCompetencia = $("#id_fkcompetence").val();
-        // console.log('id_fkcompetence\t', fkCompetencia);
-        var pkUser = $("#pkUser").val();
-        // console.log('pkUser\t', pkUser);
-        var board_url = "{%  url 'ajaxDetalle' %}";
         $.ajax({
             // initialize an AJAX request      
             url: board_url,
@@ -178,13 +128,16 @@
                 // TAB 3
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
+                
                 // OUT Tab 1
                 nombArea.innerHTML = '<b>Area:</b> '+data['infoArea'];
                 tiene.value = data['tiene'];
                 tiene.checked = true;
                 descripcionComp.innerHTML = '<b>Description:</b> '+ data['infoCompetencia'];
-                // OUT Tab 2
-                // console.log('anotacionSeman\t', data['anotacion']);
+
+
+                //OUT Tab 2 (nuevas entidades)
+                // console.log('anotacionSeman\t', data);
                 // console.log('entidadesFred\t', data['anotacion']['vinculacionFred']);
                 if (data['anotacion']['vicunlancionDB'].length === 0){
                     htmlSpotlight.innerHTML = '<p class="text-justify"><b>No response</b> from DBpedia Spotlight API</p>';
@@ -201,33 +154,127 @@
                 }else{
                     htmlDigcomp.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vinculacionDigcomp'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vinculacionDigcomp'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vinculacionDigcomp'][2] + finSectionCard + finCardBTitulo + finCard;
                 }
-                
+                // TAB 3
+                var reatitulo = document.getElementById("nombRecurso");
+                var readetalle = document.getElementById("recomendacion");
+                sugerencias = data['recurso'];
+                // console.log('Cargando recomendacion actual\t', sugerencias);
+                // console.info('Recomendaciones\n', sugerencias);
+                // console.info('TIPO dato\t', typeof(sugerencias));
+                if(sugerencias == null || typeof(sugerencias)== 'string'){
+                    reatitulo.innerHTML = '<b>No coincidences</b>';
+                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';
+                    // Cuando no hay resultados
+                }else if(typeof(sugerencias) == 'object' && sugerencias.length > 1){
+                    // Un solo recurso
+                    console.info('Cantidad de sug.\t', sugerencias.length);
+                    var lista = [];
+                    lista = '<ol>';
+                    for (indice in sugerencias) {
+                        // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1]);
+                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
+                    }
+                    lista += '<ol>';
+                    reatitulo.innerHTML = '<b>Recommendations</b>';
+                    btnActualizar ='<button type="button" class="btn btn-primary" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    
+                    readetalle.innerHTML = '<p class="text-justify">'+lista+btnActualizar+'</p>';
+
+                    // readetalle.innerHTML = '<section class="text-justify">'+lista+'</section>';
+                }else{
+                    // Un solo recurso
+                    reatitulo.innerHTML = '<b>Recommendation</b>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="'+sugerencias[1]+'">See more</a>';
+                }
+            }
+        });
+    });
+
+    function ajaxRecomendaciones(){
+        var fkCompetencia = $("#id_fkcompetence").val();
+        // console.log('id_fkcompetence\t', fkCompetencia);
+        var pkUser = $("#pkUser").val();
+        // console.log('pkUser\t', pkUser);
+        var board_url = "{%  url 'ajaxDetalle' %}";
+        $.ajax({
+            // initialize an AJAX request      
+            url: board_url,
+            type: "GET",
+            data: {
+                'fkCompetencia': fkCompetencia,
+                'pkUser': pkUser,
+            },
+            datatype:'json',
+            success: function(data) {
+                var iniCard = '<div class="col-12">';
+                var iniCardHTitulo = '<div class="card-header">';
+                var finCardHTitulo = '</div>';
+                var iniCardBTitulo = '<div class="card-body">';
+                var iniBTitulo = '<h5 class="card-title">';
+                var finBTitulo = '</h5>';
+                var iniSectionCard = '<section class="card-text"><p class="text-justify">';
+                var finSectionCard = '</p></section>';
+                var finCardBTitulo = '</div>';
+                var finCard = '</div>';
+
+                // TAB 2
+                var htmlSpotlight = document.getElementById("anotacionDbpedia");
+                var htmlFred = document.getElementById("anotacionFred");
+                var htmlDigcomp = document.getElementById("anotacionDigcomp");
+                // TAB 3
+                var reatitulo = document.getElementById("nombRecurso");
+                var readetalle = document.getElementById("recomendacion");
+
+                //OUT Tab 2 (nuevas entidades)
+                // console.log('anotacionSeman\t', data);
+                // console.log('entidadesFred\t', data['anotacion']['vinculacionFred']);
+                if (data['anotacion']['vicunlancionDB'].length === 0){
+                    htmlSpotlight.innerHTML = '<p class="text-justify"><b>No response</b> from DBpedia Spotlight API</p>';
+                }else{
+                    htmlSpotlight.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vicunlancionDB'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vicunlancionDB'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vicunlancionDB'][2] + finSectionCard + finCardBTitulo + finCard;
+                }
+                if(data['anotacion']['vinculacionFred'].length === 0) {
+                    htmlFred.innerHTML = '<p class="text-justify"><b>No response</b> from Fred API. <b>Remember:</b> The token is valid for 1 year and gives you 5 requests per minute, maximum 1500 per day.\n<b>This token was obtained:</b> 08/01/2020.</p>';
+                }else{
+                    htmlFred.innerHTML = data['anotacion']['vinculacionFred'];
+                }
+                if (data['anotacion']['vinculacionDigcomp'].length === 0){
+                    htmlDigcomp.innerHTML = '<p class="text-justify"><b>No response</b> from Ontology Digcomp. <b>Check</b> which service where Digcomp is located is up.</p>';
+                }else{
+                    htmlDigcomp.innerHTML = iniCard + iniCardHTitulo +'<b>Area:</b> '+ data['anotacion']['vinculacionDigcomp'][0] + finCardHTitulo + iniCardBTitulo +iniBTitulo + '<b>Selected digital competence:</b> ' + data['anotacion']['vinculacionDigcomp'][1] + finBTitulo + iniSectionCard +'<b>Description:</b> '+ data['anotacion']['vinculacionDigcomp'][2] + finSectionCard + finCardBTitulo + finCard;
+                }
+
                 // OUT Tab 3
+                var reatitulo = document.getElementById("nombRecurso");
+                var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recurso'];
                 console.log('Recomendacion\t', sugerencias);
-                if (sugerencias == null || typeof sugerencias == 'string'){
+                console.log('TIPO dato\t', typeof sugerencias);
+                if(sugerencias == null || typeof(sugerencias)== 'string'){
                     // Cuando no hay resultados
                     reatitulo.innerHTML = '<b>No coincidences</b>';
                     readetalle.innerHTML = '<p class="text-justify">Available at the moment... wait</p>';
                 }else if(typeof sugerencias == 'object'){
                     // Lista recurso
+                    console.log('Cantidad de sug.\t', sugerencias.length);
                     var lista = [];
                     lista = '<ol>';
                     for (indice in sugerencias) {
-                        console.log(sugerencias[indice][0][0][0]);
-                        lista += '<li><b>'+sugerencias[indice][0][0]+'</b> - <a href="'+sugerencias[indice][0][1]+'">See more</a></li>';
+                        // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1]);
+                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
                     }
                     lista += '<ol>';
                     reatitulo.innerHTML = '<b>Recommendations</b>';
-                    readetalle.innerHTML = '<p class="text-justify">'+lista+'</p>';
+                    btnActualizar ='<button type="button" class="btn btn-primary" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    readetalle.innerHTML = '<p class="text-justify">'+lista+btnActualizar+'</p>';
                 }else{
                     // Un solo recurso
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0][0]+'</b> - <a href="'+sugerencias[0][1]+'">See more</a>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="'+sugerencias[1]+'">See more</a>';
                 }
             }
         });
-    });
+    }
   </script>
 {% endblock %}
 

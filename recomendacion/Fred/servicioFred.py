@@ -78,20 +78,24 @@ class entitiesFred:
         response = None
         try:
             response = requests.get(url, headers = headers)
-            # print("Response:\n{}\n".format(response))
+            print("Response:\n{}\n".format(response))
             code = response.status_code
             # print('code\t{}'.format(response.content))
+
+            # entidadesFred = response.getEntity()
+            # print("Entidades FRED:\n{}\n".format(entidadesFred))
+            
             respuestaFred = self.buscandoEntidades(response.content)
             # print('content\t{}'.format(respuestaFred))
             return respuestaFred
         except requests.ConnectionError as err:
             print('exceptions.ConnectionError\n', err)
-            return 'err\t',err
+            return 'err\t', err
         except requests.exceptions.ConnectionError as errC:
             print('ConnectionError\n', errC)
-            return 'errC\t',errC
+            return 'errC\t', errC
         except Exception as e:
-            return 'e\t',e
+            return 'e\t', e
     
     def __del__(self):
         # Destructores, eliminar un objeto simplellamada al método:dell obj (del Objeto)

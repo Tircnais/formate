@@ -239,11 +239,13 @@ class entitiesDigcomp:
 
         lista = []
         for result in results["results"]["bindings"]:
-            predicado = result["p"]["value"]
+            # print('Detalle\t', result)
+            predicado = result["label"]["value"]
             objeto = result["o"]["value"]
             recurso = {}
-            recurso['predicado'] = predicado
-            recurso['objeto'] = objeto
+            recurso[predicado] = objeto
+            # recurso['predicado'] = predicado
+            # recurso['objeto'] = objeto
             lista.append(recurso)
         return lista
 
