@@ -171,20 +171,21 @@
                     var lista = [];
                     lista = '<ol>';
                     for (indice in sugerencias) {
+                        var url = '{{ base_url }}/buscador/oer/'+sugerencias[indice][1];
+                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+url+'">See More</a></li>';
                         // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1]);
-                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
+                        // lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
                     }
                     lista += '<ol>';
                     reatitulo.innerHTML = '<b>Recommendations</b>';
-                    btnActualizar ='<button type="button" class="btn btn-primary" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
-                    
+                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<p class="text-justify">'+lista+btnActualizar+'</p>';
 
                     // readetalle.innerHTML = '<section class="text-justify">'+lista+'</section>';
                 }else{
                     // Un solo recurso
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="'+sugerencias[1]+'">See more</a>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>';
                 }
             }
         });
@@ -195,7 +196,7 @@
         // console.log('id_fkcompetence\t', fkCompetencia);
         var pkUser = $("#pkUser").val();
         // console.log('pkUser\t', pkUser);
-        var board_url = "{%  url 'ajaxDetalle' %}";
+        var board_url = "{%  url 'ajaxSugerencia' %}";
         $.ajax({
             // initialize an AJAX request      
             url: board_url,
@@ -261,7 +262,8 @@
                     lista = '<ol>';
                     for (indice in sugerencias) {
                         // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1]);
-                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
+                        var url = '{{ base_url }}/buscador/oer/'+sugerencias[indice][1];
+                        lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+url+'">See More</a></li>';
                     }
                     lista += '<ol>';
                     reatitulo.innerHTML = '<b>Recommendations</b>';
@@ -270,7 +272,7 @@
                 }else{
                     // Un solo recurso
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="'+sugerencias[1]+'">See more</a>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>';
                 }
             }
         });

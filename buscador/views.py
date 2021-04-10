@@ -34,21 +34,76 @@ def listadoRecursos(request):
         'recursos': reaDisponibles,
     }
     del servicioConsultas
+    print('REA 1ER:\n',reaDisponibles[0]['uri'])
     # Para visualizacion en local (reemplece en HTML|DJANGO)
     # http://localhost:7200/resource?uri=http:%2F%2Flocalhost:7200%2Foer%2Frecursos%2F1062
     return render(request, "tables.html", cntxtREA)
 
-def detalleRecurso(request):
-    uri = request.GET['uri']
-    # enlace Recurso
+def detalleRecurso(request, uri):
+    '''
+        Recurso detallado usando la URI del mismo.
+
+        Args:
+            request (str): Obtiene el codigo de la URL, como argumento
+
+        Returns:
+            dict: Recurso con toda la informacion guardada
+    '''
+    uri = str(uri)
+    # se extrae el codigo URI para buscar su detalle
+    uri = 'http://localhost:7200/oer/recursos/'+ uri
+    # completamos la URI
+    print('URI:\t', uri)
     servicioConsultas = entitiesDigcomp()
-    # se llama al servicio
     reaConsultado = servicioConsultas.recursoDetallado(uri)
-    # uri = 'http://localhost:7200/oer/recursos/'+ uri
-    cntxtREA = {
-        'recurso': reaConsultado
-    }
     del servicioConsultas
+    # se llama al servicio creado
+    detalleRecurso = {}
+    # print('detalle\t', reaConsultado)
+    
+    infoREA = []
+    # hasta 3 elementos (VER )
+    for detalle in reaConsultado:
+        k, v = next(iter(detalle.items()))
+        if k == 'Title':
+            infoREA.append(detalle[k])
+            print(k, ":", detalle[k])
+        elif k == 'Description' or k == 'description':
+            infoREA.append(detalle[k])
+            print(k, ":", detalle[k])
+        elif k == 'Subject' or k == 'subject':
+            infoREA.append(detalle[k])
+            print(k, ":", detalle[k])
+        
+        k = k.replace(' ', '')
+        # eliminamos espacios para acceder desde el template
+        v if len(v) == 0 else "N/A"
+        # sino hay valor reemplazar con N/A
+        # print("V\t", v)
+        detalleRecurso.setdefault(k, v)
+        # agrega nuevos detalles al diccionario
+    
+    # wad = {clau: [v for detalle in reaConsultado for k, v in detalle.items() if k == clau] for q in reaConsultado for clau in q}
+    # print('wad\n',wad)
+
+    objectIntegracion = Integracion()
+    if(len(infoREA) == 1):
+        infoREA.append('')
+        infoREA.append('')
+    elif(len(infoREA) == 2):
+        infoREA.append('')
+    else:
+        infoREA = infoREA
+    infoREA = '. '.join(infoREA)
+    anotacionSemantica = objectIntegracion.entidadesEncontradas(infoREA)
+    del objectIntegracion
+    print('INFO REA.\n{}\n\n'.format(anotacionSemantica))
+
+    cntxtREA = {
+        'recurso': detalleRecurso,
+        'anotacion': anotacionSemantica
+    }
+    
     return render(request, "recursoDetallado.html", cntxtREA)
 
 
@@ -124,6 +179,8 @@ def cargandoRecurso(request):
                     for clave, valor in detalle.items():
                         if(clave == 'Title' or clave == 'title' or clave == 'ttitle'):
                             # print('>>', clave, valor)
+                            uri = uri.split('/') # separamos la URI para obener el codigo
+                            uri = uri[len(uri)-1] # solo se obtiene el codigo
                             sugerenciasPrevias.append((valor, uri))
                             # si es el titulo se agrega a la lista
                             coincidencia = True
@@ -131,12 +188,13 @@ def cargandoRecurso(request):
                             # encuentra una coicidencia pasa al siguiente recurso
                     if coincidencia:
                         break
+        # context['base_url'] = 'sugerenciasPrevias'
         context['recurso'] = sugerenciasPrevias
         return JsonResponse(context, safe=False)
 
 
 @csrf_exempt
-def DetalleCompetencia(request):
+def buscaRecomendacion(request):
     '''
         Ajax que permite obtener el nombre del area y descripcion de la competencias seleccionada
 
@@ -189,7 +247,7 @@ def DetalleCompetencia(request):
         sugerencias = []
         objEntidades = entitiesDigcomp()
         for uri in listaSugerencias:
-            print('VIEW recurso\t', uri)
+            # print('VIEW recurso\t', uri)
             recurso = objEntidades.recursoDetallado(uri)
             # se obtiene el detalle como lista, cada elemento es un diccionario
             coincidencia = False
@@ -197,6 +255,8 @@ def DetalleCompetencia(request):
                 for clave, valor in detalle.items():
                     if(clave == 'Title' or clave == 'title' or clave == 'ttitle'):
                         # print('>>', clave, valor)
+                        uri = uri.split('/') # separamos la URI para obener el codigo
+                        uri = uri[len(uri)-1] # solo se obtiene el codigo
                         sugerencias.append((valor, uri))
                         # si es el titulo se agrega a la list
                         coincidencia = True

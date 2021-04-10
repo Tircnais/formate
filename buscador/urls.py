@@ -7,8 +7,8 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, V
 urlpatterns = [
     path('<int:pk>', views.index.as_view(),name='busca_home'),
     path('oer', views.listadoRecursos, name='busca_rea'),
-    path('oer/<str:uri>/', views.detalleRecurso, name='detalle_rea'),
+    path('oer/<str:uri>', views.detalleRecurso, name='detalle_rea'),
     # Funciones Ajax
     path('recursoActual/', views.cargandoRecurso, name='ajaxMuestraRecurso'),
-    path('detalleCompetencia/', views.DetalleCompetencia, name='ajaxDetalle'),
+    path('consultaSugerencia/', views.buscaRecomendacion, name='ajaxSugerencia'),
 ]

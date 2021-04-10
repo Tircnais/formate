@@ -4,6 +4,16 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 class entitiesDigcomp:
     # endpointREA ="http://localhost:7200/repositories/02"
     def anotacion(self, nombArea: str, nombComp: str):
+        '''
+            Se consulta el detalle de la Competencia Digital.
+
+            Args:
+                nombArea (str): Area entrante
+                nombComp (str): CD a consultar
+
+            Returns:
+                list: Detalle de la CD consultada
+        '''        
         # print("llega:\t", nombArea)
         # Endpoint con Server D2RQ
         sparqlendpoint = "http://localhost:2020/sparql"
@@ -60,6 +70,15 @@ class entitiesDigcomp:
         
     
     def vinculadoEntidades(self, textoEntrada: str):
+        '''
+            Reemplazando texto con entidades
+
+            Args:
+                textoEntrada (str): Texto recibido separado por punto (.) para se reemplazado
+
+            Returns:
+                dict: Diccionario con los entidades de los servicios empleados
+        '''
         tripletaResultante = None
         ner_nel = {}
         entidadesDigcomp = []
@@ -162,6 +181,13 @@ class entitiesDigcomp:
         return lista
 
     def recursosDisponibles(self):
+        '''
+            Se consulta todos los REA guardados se obtiene el titulo, categoria e URI.
+
+            Returns:
+                list: Recursos disponibles en el Triplestore (se extrea: Titulo, categoria, URI)
+        '''
+                
         # Endpoint Storage con GraphDB
         # Apertura del endpoint para ejecutar la consulta
         sparqlendpoint ="http://localhost:7200/repositories/02"
@@ -197,20 +223,22 @@ class entitiesDigcomp:
             recurso = {}
             recurso['titulo'] = titulo
             recurso['categoria'] = categoria
-            recurso['enlace'] = ver_mas
+            ver_mas = ver_mas.split('/') # separamos la URI para obener el codigo
+            recurso['uri'] = ver_mas[len(ver_mas)-1] # solo se obtiene el codigo
             lista.append(recurso)
             # print('recurso disponible\t', recurso)
         return lista
     
     def recursoDetallado(self, uri: str):
-        """Detalle del recurso, usando la URI del mismo para buscar lo.
+        '''
+            Detalle del recurso, usando la URI del mismo para buscar lo.
 
-        Args:
-            uri (str): enlace del recurso presentado
-        
-        Returns:
-            recurso (dict): Detalle encontrado del recurso
-        """        
+            Args:
+                uri (str): enlace del recurso presentado
+            
+            Returns:
+                recurso (dict): Detalle encontrado del recurso
+        '''
         # Endpoint Storage con GraphDB
         # Apertura del endpoint para ejecutar la consulta
         sparqlendpoint ="http://localhost:7200/repositories/02"
@@ -222,7 +250,7 @@ class entitiesDigcomp:
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX oerr: <http://localhost:7200/oer/resource/>
-        PREFIX : <http://localhost:7200/oer/ontology/>
+        PREFIX oero: <http://localhost:7200/oer/ontology/>
         select distinct ?uri_oer ?label ?o where {
             ?uri_oer ?p ?o .
             ?uri_oer a oerr:Course .
@@ -244,8 +272,6 @@ class entitiesDigcomp:
             objeto = result["o"]["value"]
             recurso = {}
             recurso[predicado] = objeto
-            # recurso['predicado'] = predicado
-            # recurso['objeto'] = objeto
             lista.append(recurso)
         return lista
 

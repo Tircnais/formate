@@ -17,7 +17,7 @@
             <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable OER</div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -37,7 +37,7 @@
                                 <tr>
                                     <td>{{recurso.titulo}}</td>
                                     <td>{{recurso.categoria}}</td>
-                                    <td><a href="{% url 'detalle_rea' recurso.enlace %}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail. {{recurso.enlace}}" role="button">More information</a></td>
+                                    <td><a href="oer/{{recuerso.uri}}">See More</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -53,6 +53,8 @@
     
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script> -->
 
     {% comment %} <script src="{% static 'assets/demo/datatables-demo.js' %}"></script> {% endcomment %}
 {% endblock %}

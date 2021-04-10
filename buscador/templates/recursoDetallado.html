@@ -5,42 +5,156 @@
 
 {% block contenido %}
     <div class="container-fluid">
-        <h1 class="mt-4">OER Available</h1>
+        <h2 class="mt-4 text-center">{{recurso.Title}}</h2>
+        <!-- imagen, image -->
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
             <li class="breadcrumb-item active">OER</li>
         </ol>
         <div class="card mb-4">
-            <div class="card-body">Detail of the requested resource.</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xs-8">{{recurso.Description}}</div>
+                    <div class="col-xs-4">
+                        <img src="{{recurso.image}}" class="img-fluid float-right" alt="Image of OER">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card mb-4">
-            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable OER</div>
-            <p>{{recursos}}</p>
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Detail of the requested resource</div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Category</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Title</th>
-                                <th>Category</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            {% for recurso in recursos %}
-                                <tr>
-                                    <td>{{recurso.predicado}}</td>
-                                    <td>{{recurso.objeto}}</td>
-                                    <td><a href="{{recurso.objeto}}" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Click to review resource detail" role="button">More information</a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <div class="col-3">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="text-center">Resource relationships</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="font-weight-bold text-left">Entities DIGCOMP</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col bg-secondary">
+                                        <p class="text-justify">
+                                            <ul class="list-group list-group-flush">
+                                                {% if anotacion.entidadesDB %}
+                                                    {% for entidad in anotacion.entidadesDB %}
+                                                        <li class="list-group-item"><a href="{{entidad.0}}">{{entidad.1}}</a></li>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <li class="list-group-item">N/A</li>
+                                                {% endif%}
+                                            </ul>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="font-weight-bold text-left">Entities DBpedia</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col bg-dark">
+                                        <p class="text-justify">
+                                            <ul class="list-group list-group-flush">
+                                                {% if anotacion.entidadesDigcomp %}
+                                                    {% for entidad in anotacion.entidadesDigcomp %}
+                                                        <li class="list-group-item"><a href="{{entidad.0}}">{{entidad.1}}</a></li>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <li class="list-group-item">N/A</li>
+                                                {% endif%}
+                                            </ul>
+                                            {% comment %} {{anotacion.entidadesFred}} {% endcomment %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="row m-2 p-2 bg-light">
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Subject: </b>{{recurso.Subject}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Date published: </b>{{recurso.Datepublished}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Date created: </b>{{recurso.Datecreated}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Language: </b>{{recurso.Resourcelanguage}}
+                                </p>
+                            </div> 
+                        </div>
+                        <div class="row m-2 p-2 bg-light">
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Amount of valuations: </b>{{recurso.amountofvaluations}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Resource valuation: </b>{{recurso.resourcevaluation}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>User assessment of the resource: </b>{{recurso.userassessmentoftheresource}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row m-2 p-2 bg-light">
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>License: </b>{{recurso.license}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Resource license: </b>{{recurso.Resourcelicense}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row m-2 p-2 bg-light">
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Author: </b>{{recurso.Author}}, {{recurso.Authorlink}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Provider: </b>{{recurso.Provider}}, {{recurso.Providerlink}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row m-2 p-2 bg-light">
+                            <div class="col">
+                                <p class="text-justify">
+                                    <b>Link: </b><a href="{{recurso.linkOER}}">go</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

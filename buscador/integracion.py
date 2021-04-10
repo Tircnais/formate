@@ -151,7 +151,7 @@ class Integracion:
             # print('Prediccion CD\nEtiqueta: %s\tMedicion: %.2f' %(etiqueta, medicion))
             medicion = round(medicion, 2)
             # se convieter a % (con 2 decimales)
-            for titulo, enlace, prediccion in recursos:
+            for titulo, uri, prediccion in recursos:
                 if type(prediccion) is list:
                     # cuando hay mas de una prediccion
                     for p_eti, p_med in prediccion:
@@ -160,8 +160,8 @@ class Integracion:
                         if medicion >= umbral and p_med >= umbralREA:
                             # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, p_med))
                             # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
-                            # recursoRecomendados.append((titulo, enlace))
-                            recursoRecomendados.append(enlace)
+                            # recursoRecomendados.append((titulo, uri))
+                            recursoRecomendados.append(uri)
                 else:
                     # cuando solo hay una prediccion
                     # print("{0} | {1}".format(prediccion[0], prediccion[1]))
@@ -169,8 +169,8 @@ class Integracion:
                     if medicion >= umbral and prediccion >= umbralREA:
                         # print('Umbral: \t{}\nPred CD\t{}\tPred REA\t{}'.format(umbral, medicion, prediccion))
                         # si ambas predicciones (CD y el recurso) superan el umbral establecido se agrega como coicidencia
-                        # recursoRecomendados.append((titulo, enlace))
-                        recursoRecomendados.append(enlace)
+                        # recursoRecomendados.append((titulo, uri))
+                        recursoRecomendados.append(uri)
         return recursoRecomendados
 
 
@@ -228,7 +228,8 @@ class Integracion:
         for oer in reas:
             # print('>>{}\n'.format(oer))
             prediccionREA = self.prediccionTexto(oer['titulo']+' '+oer['categoria'])
-            listaREA.append((oer['titulo'], oer['enlace'], prediccionREA))
+            # se envia el titulo y categoria para predecir
+            listaREA.append((oer['titulo'], oer['uri'], prediccionREA))
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
