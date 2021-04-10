@@ -10,6 +10,7 @@
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
             <li class="breadcrumb-item active">OER</li>
+            <li class="breadcrumb-item active"><a href="#" onclick="goBack()">&laquo;</a></li>
         </ol>
         <div class="card mb-4">
             <div class="card-body">
@@ -167,4 +168,9 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     {% comment %} <script src="assets/demo/datatables-demo.js"></script>     {% endcomment %}
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 {% endblock %}
