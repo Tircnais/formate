@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block titulo %}
-	Registro de competencias
+  Record digital competence
 {% endblock %}
 
 {% block contenido %}
-  <h1 class="mt-4 text-center">Registro de Competencias Digitales</h1>
+  <h1 class="mt-4 text-center">Record digital competence</h1>
   <div class="row">
     <div class="col-xl-12">
       <form class="custom-form" method="POST" action="">
@@ -15,7 +15,7 @@
           <div class="fieldWrapper col-xl-12">
             <div class="row">
               <div class="col-xl-12">
-                <label for="{{ form.fkcompetence.id_for_label }}"><b>Competencia Digital:</b></label>
+                <label for="{{ form.fkcompetence.id_for_label }}"><b>Digital competence:</b></label>
                 {{form.fkcompetence}}
               </div>
               <div class="col-xl-12">
@@ -32,7 +32,7 @@
                 <p id="nombre_area"></p>
               </div>
               <div class="col-xl-12">
-                <label for="descrip"><b>Descripción:</b></label>
+                <label for="descrip"><b>Description:</b></label>
                 <p id="descripcion_competencia"></p>
               </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="row">
               <div class="col-xl-12">
                 {{ form.tiene.errors }}
-                <label for="{{ form.tiene.id_for_label }}"><b>¿Crees tener la competencia?</b></label>
+                <label for="{{ form.tiene.id_for_label }}"><b>Do you think you have the competition?</b></label>
                 {{ form.tiene }}
               </div>
               <div class="col-xl-12">
@@ -54,7 +54,7 @@
         </div>
         <div class="text-center">
           <button type="submit" class="btn btn-primary btn-user">
-            Registrar
+            Submit
           </button>
         </div>
       </form>

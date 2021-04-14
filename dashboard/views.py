@@ -62,14 +62,14 @@ def index(request):
     resumen['Ejemplos disponibles'] = Examples.objects.all().count()
     # nombAreas = Areas.objects.values_list('nameareaes')
     # nombGrupos = Groups.objects.values_list('namegroupes')
-    nombAreacantCopm  = Competences.objects.values('fkarea__nameareaes').annotate(numCompArea=Count('fkarea')).order_by('fkarea')
+    nombAreacantCopm  = Competences.objects.values('fkarea__nameareaen').annotate(numCompArea=Count('fkarea')).order_by('fkarea')
     nombAreaNumComp = [(*dict_instance.values(),) for dict_instance in nombAreacantCopm]
     # nombAreaNumComp = [f'{value[0]}: {value[1]}' for value in values]
     
-    nombCompCantExam = Examples.objects.values('fkcompetence__namecompetencees').annotate(numExampComp=Count('fkcompetence')).order_by('fkcompetence')[:20]
+    nombCompCantExam = Examples.objects.values('fkcompetence__namecompetenceen').annotate(numExampComp=Count('fkcompetence')).order_by('fkcompetence')[:20]
     nombCompNumExam = [(*dict_instance.values(),) for dict_instance in nombCompCantExam]
     
-    nombGrupoCantNiveles = Proficiencylevels.objects.values('fkgroup__namegroupes').annotate(numNivelesGrupo=Count('fkgroup')).order_by('fkgroup')
+    nombGrupoCantNiveles = Proficiencylevels.objects.values('fkgroup__namegroupen').annotate(numNivelesGrupo=Count('fkgroup')).order_by('fkgroup')
     nombGrupoNumNiveles = [(*dict_instance.values(),) for dict_instance in nombGrupoCantNiveles]
     # nombGrupoNumNiveles = [f'{value[0]}: {value[1]}' for value in claveValor]
     # print(objModel.__str__)

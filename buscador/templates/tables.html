@@ -37,7 +37,7 @@
                                 <tr>
                                     <td>{{recurso.titulo}}</td>
                                     <td>{{recurso.categoria}}</td>
-                                    <td><a href="oer/{{recuerso.uri}}">See More</a></td>
+                                    <td><a href="/buscador/oer/{{recurso.uri}}">Go resource</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -48,13 +48,11 @@
     </div>
 {% endblock %}
 {% block script %}
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    {% comment %} <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> {% endcomment %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    
+
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script> -->
 
     {% comment %} <script src="{% static 'assets/demo/datatables-demo.js' %}"></script> {% endcomment %}
 {% endblock %}

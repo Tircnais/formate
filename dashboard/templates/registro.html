@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 {% block titulo %}
-    Registro de usuarios
+    User Registration
 {% endblock %}
 
 {% load i18n %}
@@ -10,11 +10,11 @@
         <div class="col-lg-7">
             <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header">
-                    <h1 class="text-center font-weight-light my-4">¡Registrate es gratis!</h1>
+                    <h1 class="text-center font-weight-light my-4">Sign up is free!</h1>
                     <h3 class="text-center font-weight-light my-4">Crea tu cuenta</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url "nuevoUs" %}">
+                    <form method="post" action="{% url 'nuevoUs' %}">
                         {% csrf_token %}
                         <div class="form-row">
                             <div class="col-md-6">
@@ -79,7 +79,7 @@
                 <div class="card-footer text-center">
                     <div class="small">
                         <p>
-                            ¿Tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+                            You have an account? <a href="{% url 'login' %}">Log in</a>
                         </p>
                     </div>
                 </div>

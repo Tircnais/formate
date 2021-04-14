@@ -1,13 +1,13 @@
 {% extends "master.html" %}
 {% block titulo %}
-	Mis competencias
+    My digital competences
 {% endblock %}
 
 {% block contenido %}
-    <h1 class="mt-4 text-center">Mis competencias digitales</h1>
+    <h1 class="mt-4 text-center">My digital competences</h1>
     <div class="row">
         <div class="col-xl-12">
-            <label class="mb-4" for="help_textCompetencia">Aquellas en negrita significan que tiene.</label>
+            <label class="mb-4" for="help_textCompetencia">Those in bold mean you have.</label>
         </div>
         <div class="col-xl-12">
             {% for detalle in misCompetencias %}
@@ -26,10 +26,10 @@
                                 {% endif %}
                             </h5>
                             <p class="card-text">
-                                <label for="descripcionCompetencia">Descripción:</label>
+                                <label for="descripcionCompetencia">Description:</label>
                                 {{detalle.fkcompetence.descriptioncompetencees}}
                             </p>
-                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Update</a>
                         </div>
                     </div>
                     <br>
@@ -48,10 +48,10 @@
                                 {% endif %}
                             </h5>
                             <p class="card-text">
-                                <label for="descripcionCompetencia">Descripción:</label>
+                                <label for="descripcionCompetencia">Description:</label>
                                 {{detalle.fkcompetence.descriptioncompetencees}}
                             </p>
-                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Update</a>
                         </div>
                     </div>
                     <br>
@@ -70,10 +70,10 @@
                                 {% endif %}
                             </h5>
                             <p class="card-text">
-                                <label for="descripcionCompetencia">Descripción:</label>
+                                <label for="descripcionCompetencia">Description:</label>
                                 {{detalle.fkcompetence.descriptioncompetencees}}
                             </p>
-                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Update</a>
                         </div>
                     </div>
                     <br>
@@ -92,10 +92,10 @@
                                 {% endif %}
                             </h5>
                             <p class="card-text">
-                                <label for="descripcionCompetencia">Descripción:</label>
+                                <label for="descripcionCompetencia">Description:</label>
                                 {{detalle.fkcompetence.descriptioncompetencees}}
                             </p>
-                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Update</a>
                         </div>
                     </div>
                     <br>
@@ -114,10 +114,10 @@
                                 {% endif %}
                             </h5>
                             <p class="card-text">
-                                <label for="descripcionCompetencia">Descripción:</label>
+                                <label for="descripcionCompetencia">Description:</label>
                                 {{detalle.fkcompetence.descriptioncompetencees}}
                             </p>
-                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Actualizar</a>
+                            <a class="btn btn-outline-dark" role="button" href="{% url 'actualizarComp' detalle.fkcompetence.idcompetence %}">Update</a>
                         </div>
                     </div>
                     <br>

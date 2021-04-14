@@ -1,13 +1,13 @@
 {% extends 'master.html' %}
 {% block titulo %}
-	Cerrar sesión
+	Sign off
 {% endblock %}
 
 {% load i18n %}
 
 {% block contenido %}
-	<p class='text-align-center lead'>Has cerrado tu sesion satisfactoriamente.</p>
+	<p class='text-align-center lead'>You have successfully closed your session.</p>
 	<p class='text-align-center lead'>
-		<a href="{% url 'login' %}">Iniciar sesión</a>
+		<a href="{% url 'login' %}">Log in</a>
 	</p>
 {% endblock %}

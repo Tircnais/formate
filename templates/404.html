@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 {% block titulo %}
-    Pagina no encontrada
+    Page not found
 {% endblock %}
 
 {% block contenido %}
@@ -8,8 +8,8 @@
         <div class="col-lg-6">
             <div class="text-center mt-4">
                 <img class="mb-4 img-error" src="{% static 'assets/img/error-404-monochrome.svg' %}" />
-                <p class="lead">La URL solicitada no se encontró en este servidor.</p>
-                <a href="{% url 'home' %}"><i class="fas fa-arrow-left mr-1"></i>Regrese al Inicio</a>
+                <p class="lead">The requested URL was not found on this server.</p>
+                <a href="{% url 'home' %}"><i class="fas fa-arrow-left mr-1"></i>Return to Home</a>
             </div>
         </div>
     </div>

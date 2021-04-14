@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 {% block titulo %}
-    Iniciar sesión
+    Log in
 {% endblock %}
 {% load i18n %}
 
@@ -8,19 +8,19 @@
     <div class="col-lg-12">
         <div class="card shadow-lg border-0 rounded-lg mt-5">
             <div class="card-header">
-                <h3 class="text-center font-weight-light my-4">Iniciar sesión</h3>
+                <h3 class="text-center font-weight-light my-4">Log in</h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 offset-md-4">
                         {% if form.errors %}
-                            <p class="text-center row">Tu usuario y clave no coiciden... Revisa tus credenciales e intenta de nuevo.</p>
+                            <p class="text-center row">Your username and password do not match... check your credentials and try again.</p>
                         {% endif %}
                         {% if next %}
                             {% if user.is_authenticated %}
-                                <p class="text-center row">Su cuenta no tiene acceso a esta página. Para continuar, inicie sesión con una cuenta que tenga acceso.</p>
+                                <p class="text-center row">Your account does not have access to this page. To continue, log in with an account that has access.</p>
                             {% else %}
-                                <p class="text-center row">Inicia sesión para ver esta página.</p>
+                                <p class="text-center row">Please log in to view this page.</p>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-md-4 offset-md-4">
                             <div class="form-group">
-                                <label class="small mb-1" for="usuario">Usuario:</label>
+                                <label class="small mb-1" for="usuario">User:</label>
                                 <input class="form-control py-4" name="username" id="inputUsername" type="username" placeholder="Ingrese su nombre de usuario"/>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="col-md-4 offset-md-4">
                             <div class="form-group">
-                                <label class="small mb-1" for="inputPassword">Contraseña</label>
+                                <label class="small mb-1" for="inputPassword">Password</label>
                                 <input class="form-control py-4" name="password" id="inputPassword" type="password" placeholder="Ingrese su Contraseña"/>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-4 offset-md-4">
                             <div class="form-group">
-                                <a class="small" href="{% url 'password_reset' %}">¿Se te olvidó tu contraseña?</a>
+                                <a class="small" href="{% url 'password_reset' %}">Did you forget your password?</a>
                                 <input class="form-control btn btn-primary" id="inputIngreser" type="submit" value="Ingresar sesión">
                             </div>
                         </div>
@@ -56,10 +56,10 @@
             </div>
             <div class="card-footer text-center">
                 <div class="small">
-                    <p>Has cerrado tu sesion satisfactoriamente.</p>
+                    <p>You have successfully closed your session.</p>
                 </div>
                 <div class="small">
-                    <a href="{% url 'nuevoUs' %}">¿Necesito una cuenta? ¡Regístrate!</a>
+                    <a href="{% url 'nuevoUs' %}">I need an account? Sign up!</a>
                 </div>
             </div>
         </div>

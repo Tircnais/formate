@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 {% block titulo %}
-    Error en el servidor
+    Server error
 {% endblock %}
 
 {% block contenido %}
@@ -8,8 +8,8 @@
         <div class="col-lg-6">
             <div class="text-center mt-4">
                 <h1 class="display-1">500</h1>
-                <p class="lead">Error de servidor interno</p>
-                <a href="{% url 'home' %}"><i class="fas fa-arrow-left mr-1"></i>Regrese al Inicio</a>
+                <p class="lead">Internal server error</p>
+                <a href="{% url 'home' %}"><i class="fas fa-arrow-left mr-1"></i>Return to Home</a>
             </div>
         </div>
     </div>

@@ -5,20 +5,20 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta property="og:site_name" 			content="Sistema Busqueda basada en conocimiento"/>
-        <meta name="description"                content="Web App para integrar Recursos Educativos Abiertos con el Framework Digcomp.">
+        <meta property="og:site_name" 			content="Knowledge-based search system"/>
+        <meta name="description"                content="Web App to integrate Open Educational Resources with the Digcomp Framework.">
         <meta name="keywords" content="OER, Digcomp, Semantic web">
         <meta name="author"                     content="Cristian Aguirre">
         <meta name="co-author"                  content="Nelson Piedra">
         <meta name="copyright" content="Propietario del copyright" />
-        <meta property="og:locale" 				content="es_ES"/>
+        <meta property="og:locale" 				content="en_EN"/>
 		<meta property="og:type" 				content="article"/>
 
  		<meta property="og:url" 				content="https://backend-buscador-conocimiento.herokuapp.com/"/>
-		<meta property="og:description" 		content="Web App para integrar Recursos Educativos Abiertos con el Framework Digcomp."/>
+		<meta property="og:description" 		content="Web App to integrate Open Educational Resources with the Digcomp Framework."/>
  		<meta property="article:publisher" 		content="https://www.utpl.edu.ec"/>
 		<meta property="article:published_time" content="2020-06-17T18:15:30Z"/>
-        <title>Prototipo -
+        <title>Prototype -
             {% block titulo %}
             
             {% endblock %}
@@ -33,7 +33,7 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="{% url 'home' %}">Bienvenido</a>
+            <a class="navbar-brand" href="{% url 'home' %}">Welcome</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button
             >
             <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -55,17 +55,17 @@
                     {% if user.is_authenticated %}
                         <a class="nav-link dropdown-toggle" id="userDropdown" href="{% url 'home' %}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>{{ user.username }}</a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="{% url 'password_reset' %}">Olvidó su contraseña</a>
+                            <a class="dropdown-item" href="{% url 'password_reset' %}">Forgot your password</a>
                             <a class="dropdown-item" href="#">Activity Log</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         </div>
                     {% else %}
                         <a class="nav-link dropdown-toggle" id="userDropdown" href="{% url 'home' %}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="{% url 'nuevoUs' %}">Registrate</a>
+                            <a class="dropdown-item" href="{% url 'nuevoUs' %}">Sign up</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'login' %}">Iniciar sesión</a>
+                            <a class="dropdown-item" href="{% url 'login' %}">Log in</a>
                         </div>
                     {% endif %}
                 </li>
@@ -79,10 +79,10 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="{% url 'home' %}"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Panel</a
+                                Dashboard</a
                             >
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts"
+                            <!-- <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Navegadores
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
@@ -92,28 +92,28 @@
                                     <a class="nav-link" href="{% static 'layout-static.html' %}">Navegador estatico</a>
                                     <a class="nav-link" href="{% static 'layout-sidenav-light.html' %}">Navegador claro dinámico</a>
                                 </nav>
-                            </div>
+                            </div> -->
                             {% if user.is_authenticated %}
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Páginas
+                                Pages
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                             ></a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">Cuenta
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">Account
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                                     ></a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="{% url 'nuevasComp' %}">Registrar competencias digitales</a>
+                                            <a class="nav-link" href="{% url 'nuevasComp' %}">Register digital competences</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="nav-link" href="{% url 'misComp' %}">Mis competencias digitales</a>
+                                            <a class="nav-link" href="{% url 'misComp' %}">My digital skills</a>
                                         </nav>
                                     </div>
                                     {% if user.is_staff == true %}
                                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError"
-                                            >Errores
+                                            >Mistakes
                                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                                         ></a>
                                         <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
@@ -124,37 +124,39 @@
                                         </div>
                                     {% else %}
                                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesRecomendacion" aria-expanded="false" aria-controls="pagesRecomendacion"
-                                        >Recomendación
+                                        >Recommendation
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                                         ></a>
                                         <div class="collapse" id="pagesRecomendacion" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                             <nav class="sb-sidenav-menu-nested nav">
-                                                <a class="nav-link" href="{% url 'busca_home' user.pk %}">Ver</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="nav-link" href="{% url 'misComp' %}">Evaluar recurso</a>
+                                                <a class="nav-link" href="{% url 'busca_home' user.pk %}">View</a>
+                                                <!-- <div class="dropdown-divider"></div>
+                                                <a class="nav-link" href="{% url 'misComp' %}">Evaluate resource</a> -->
                                             </nav>
                                         </div>
                                     {% endif %}
                                 </nav>
                             </div>
                             {% endif %}
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="{% static 'charts.html' %}"
+                            <div class="sb-sidenav-menu-heading">Addons
+                            </div>
+                            {% comment %} <a class="nav-link" href="{% static 'charts.html' %}"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts</a
-                            ><a class="nav-link" href="{% url 'busca_rea' %}"
-                                ><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                OER available</a
-                            >
+                            > {% endcomment %}
+                            <a class="nav-link" href="{% url 'busca_rea' %}"
+                            ><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            OER available
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logueado como:</div>
+                        <div class="small">Logged in as:</div>
                         <div class="dropdown-divider"></div>
                         {% if user.is_authenticated %}
                             <a href="{% url 'home' %}"><span class="icon-user-check"></span>{{ user.username }}</a>
                         {% else %}
-                            <a href="{% url 'login' %}"><span class="icon-enter"></span>Iniciar sesión</a>
+                            <a href="{% url 'login' %}"><span class="icon-enter"></span>Log in</a>
                         {% endif %}
                     </div>
                 </nav>
