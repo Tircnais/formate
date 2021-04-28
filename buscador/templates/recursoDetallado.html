@@ -75,7 +75,7 @@
                                                     {% endfor %}
                                                 {% else %}
                                                     <li class="list-group-item">N/A</li>
-                                                {% endif%}
+                                                {% endif %}
                                             </ul>
                                             {% comment %} {{anotacion.entidadesFred}} {% endcomment %}
                                         </p>
@@ -139,12 +139,20 @@
                         <div class="row m-2 p-2 bg-light">
                             <div class="col">
                                 <p class="text-justify">
-                                    <b>Author: </b>{{recurso.Author}}, {{recurso.Authorlink}}
+                                    {% if recurso.Author %}
+                                        <b>Author: </b>{{recurso.Author}}, {{recurso.Authorlink}}
+                                    {% else %}
+                                        <b>Author: </b>N/A
+                                    {% endif %}
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="text-justify">
-                                    <b>Provider: </b>{{recurso.Provider}}, {{recurso.Providerlink}}
+                                    {% if recurso.Provider %}
+                                        <b>Provider: </b>{{recurso.Provider}}, {{recurso.Providerlink}}
+                                    {% else %}
+                                        <b>Provider: </b>N/A
+                                    {% endif %}
                                 </p>
                             </div>
                         </div>

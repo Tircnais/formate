@@ -148,8 +148,8 @@ class Integracion:
         umbral = 0.20
         umbralREA = umbral * 4.65
         for etiqueta, medicion in prediccionCD:
-            # print('Prediccion CD\nEtiqueta: %s\tMedicion: %.2f' %(etiqueta, medicion))
             medicion = round(medicion, 2)
+            # print('Prediccion CD\nEtiqueta: %s\tMedicion: %.2f' %(etiqueta, medicion))
             # se convieter a % (con 2 decimales)
             for titulo, uri, prediccion in recursos:
                 if type(prediccion) is list:
@@ -220,7 +220,7 @@ class Integracion:
         # Consulta para determinar los REA disponibles
         objectDigcomp = entitiesDigcomp()
         reas = objectDigcomp.recursosDisponibles()
-        print('Recursos Disponibles... integracion.py LEN: ', len(reas))
+        # print('Recursos Disponibles... integracion.py LEN: ', len(reas))
         del objectDigcomp
 
         # Prediccion con fastText

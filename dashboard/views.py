@@ -51,9 +51,6 @@ class RegistroUsuario(CreateView):
 
 
 def index(request):
-    tituloSistema ="Integración del Framework Digcomp y Recursos Educativos Abiertos (REA)"
-    objetivoSistema ="El sistema tiene como objetivo integrar el Framework Digcomp con REA la razón es capacitar a la persona en Competencias Digitales (CD)."
-    introDigcomp ="Resumen rapido de como esta conformado el Framework Digcomp en su version 2.1"
     resumen = dict()
     resumen['Total de áreas'] = Areas.objects.all().count()
     resumen['Total de competencias'] = Competences.objects.all().count()
@@ -75,9 +72,6 @@ def index(request):
     # print(objModel.__str__)
     # print(objModel.__unicode__)
     cntxtIndex = {
-        'tituloSistema': tituloSistema,
-        'objetivoSistema': objetivoSistema,
-        'introDigcomp': introDigcomp,
         'nombAreaNumComp': nombAreaNumComp,
         'nombCompNumExam': nombCompNumExam,
         'nombGrupoNumNiveles': nombGrupoNumNiveles,

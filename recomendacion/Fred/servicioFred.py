@@ -18,7 +18,7 @@ class entitiesFred:
                 temp.write(mydata)
                 temp.seek(0)
                 mydata = temp.read()
-                print('Servicio FRED temp.name:\t',temp.name)
+                # print('Servicio FRED temp.name:\t',temp.name)
                 # print('mydata\n',mydata)
                 try:
                     # g.parse(data=mydata, format="n3")
@@ -78,7 +78,7 @@ class entitiesFred:
         response = None
         try:
             response = requests.get(url, headers = headers)
-            print("Response:\n{}\n".format(response))
+            # print("Response:\n{}\n".format(response))
             code = response.status_code
             # print('code\t{}'.format(response.content))
 

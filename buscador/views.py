@@ -157,7 +157,7 @@ def cargandoRecurso(request):
         ### TAB 3
         recursoRecomendado = Competenciasusuario.objects.get(fkcompetence=idComp, fkuser= idUser).recomendacion
         objectIntegracion = Integracion()
-        recursoRecomendado = objectIntegracion.castStrToList(recursoRecomendado)
+        recursoRecomendado = list(objectIntegracion.castStrToList(recursoRecomendado))
         del objectIntegracion
         sugerenciasPrevias = []
         if(recursoRecomendado == '' or recursoRecomendado == None or len(recursoRecomendado) == 0):
@@ -168,7 +168,8 @@ def cargandoRecurso(request):
             # si hay sugerencias previas
             print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
             for uri in recursoRecomendado:
-                # print('VIEW recurso\t', uri)
+                uri = 'http://localhost:7200/oer/recursos/'+uri 
+                print('VIEW recurso\t', uri)
                 objEntidades = entitiesDigcomp()
                 recurso = objEntidades.recursoDetallado(uri)
                 # se obtiene el detalle como lista, cada elemento es un diccionario
@@ -188,7 +189,7 @@ def cargandoRecurso(request):
                             # encuentra una coicidencia pasa al siguiente recurso
                     if coincidencia:
                         break
-        # context['base_url'] = 'sugerenciasPrevias'
+        
         context['recurso'] = sugerenciasPrevias
         return JsonResponse(context, safe=False)
 
@@ -261,6 +262,7 @@ def buscaRecomendacion(request):
                         # si es el titulo se agrega a la list
                         coincidencia = True
                         # encuentra una coicidencia pasa al siguiente recurso
+                        # print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(sugerencias), len(sugerencias)))
                         break
                 if coincidencia:
                     break
@@ -271,5 +273,4 @@ def buscaRecomendacion(request):
             sugerencias = None
         context['recurso'] = sugerencias
         # Se destruye el objeto con la funcion creada
-        print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(sugerencias), len(sugerencias)))
         return JsonResponse(context, safe=False)

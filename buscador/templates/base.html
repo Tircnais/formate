@@ -46,7 +46,7 @@
                         <div class="col-2">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                 <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">DBpedia-spotlight</a>
-                                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Fred</a>
+                                {% comment %} <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Fred</a> {% endcomment %}
                                 <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Ontology Digcomp</a>
                             </div>
                         </div>
@@ -159,11 +159,12 @@
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recurso'];
                 // console.log('Cargando recomendacion actual\t', sugerencias);
-                // console.info('Recomendaciones\n', sugerencias);
+                console.info('Recomendaciones\n', sugerencias);
                 // console.info('TIPO dato\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     reatitulo.innerHTML = '<b>No coincidences</b>';
-                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>';
+                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>'+btnActualizar;
                     // Cuando no hay resultados
                 }else if(typeof(sugerencias) == 'object' && sugerencias.length > 1){
                     // Un solo recurso
@@ -185,7 +186,8 @@
                 }else{
                     // Un solo recurso
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>';
+                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>'+btnActualizar;
                 }
             }
         });
@@ -254,7 +256,8 @@
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     // Cuando no hay resultados
                     reatitulo.innerHTML = '<b>No coincidences</b>';
-                    readetalle.innerHTML = '<p class="text-justify">Available at the moment... wait</p>';
+                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>'+btnActualizar;
                 }else if(typeof sugerencias == 'object'){
                     // Lista recurso
                     console.log('Cantidad de sug.\t', sugerencias.length);
@@ -272,7 +275,8 @@
                 }else{
                     // Un solo recurso
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>';
+                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
+                    readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>'+btnActualizar;
                 }
             }
         });
