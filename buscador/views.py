@@ -157,19 +157,19 @@ def cargandoRecurso(request):
         ### TAB 3
         recursoRecomendado = Competenciasusuario.objects.get(fkcompetence=idComp, fkuser= idUser).recomendacion
         objectIntegracion = Integracion()
-        recursoRecomendado = list(objectIntegracion.castStrToList(recursoRecomendado))
+        recursoRecomendado = objectIntegracion.castStrToList(recursoRecomendado)
         del objectIntegracion
         sugerenciasPrevias = []
         if(recursoRecomendado == '' or recursoRecomendado == None or len(recursoRecomendado) == 0):
             # no hay sugerencias previas
             sugerenciasPrevias = None
-            print('Sug. Previas\n', recursoRecomendado)
+            # print('Sug. Previas\n', recursoRecomendado)
         else:
             # si hay sugerencias previas
             print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
             for uri in recursoRecomendado:
                 uri = 'http://localhost:7200/oer/recursos/'+uri 
-                print('VIEW recurso\t', uri)
+                # print('VIEW recurso\t', uri)
                 objEntidades = entitiesDigcomp()
                 recurso = objEntidades.recursoDetallado(uri)
                 # se obtiene el detalle como lista, cada elemento es un diccionario
@@ -228,17 +228,16 @@ def buscaRecomendacion(request):
         textoNaturalEnglish = '. '.join(textoNaturalEnglish)
         objectIntegracion = Integracion()
         anotacionSemantica = objectIntegracion.entidadesEncontradas(textoNaturalEnglish)
-        del objectIntegracion
+        # del objectIntegracion
         context['anotacion'] = anotacionSemantica
         
         ### TAB 3
         recomendaciones = []
-        objectIntegracion = Integracion()
+        # objectIntegracion = Integracion()
         respuestaDiccionario = objectIntegracion.recursoRecomendado(idUser, idComp, textoNaturalEnglish)
         # Se trae recurso recomendado y entidades (como parte del diccionario)
         recomendaciones = respuestaDiccionario['recursos']
         # print('Anotacion semantica\n{}\n'.format(anotacionSemantica))
-        context['anotacion'] = anotacionSemantica
         del objectIntegracion
 
         objectFunciones = Funciones()
@@ -247,9 +246,30 @@ def buscaRecomendacion(request):
         
         sugerencias = []
         objEntidades = entitiesDigcomp()
-        for uri in listaSugerencias:
-            # print('VIEW recurso\t', uri)
-            recurso = objEntidades.recursoDetallado(uri)
+        print('VIEW\nCant. sugerencias\t{}\nTipo retorno\t{}\n'.format(len(listaSugerencias), type(listaSugerencias)))
+        if type(listaSugerencias) == 'list':
+            for uri in listaSugerencias:
+                # print('VIEW recurso\t', uri)
+                recurso = objEntidades.recursoDetallado(uri)
+                # se obtiene el detalle como lista, cada elemento es un diccionario
+                coincidencia = False
+                for detalle in recurso:
+                    for clave, valor in detalle.items():
+                        if(clave == 'Title' or clave == 'title' or clave == 'ttitle'):
+                            # print('>>', clave, valor)
+                            uri = uri.split('/') # separamos la URI para obener el codigo
+                            uri = uri[len(uri)-1] # solo se obtiene el codigo
+                            sugerencias.append((valor, uri))
+                            # si es el titulo se agrega a la list
+                            coincidencia = True
+                            # encuentra una coicidencia pasa al siguiente recurso
+                            # print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(sugerencias), len(sugerencias)))
+                            break
+                    if coincidencia:
+                        break
+        elif type(listaSugerencias) == 'str':
+            # print('VIEW recurso\t', listaSugerencias)
+            recurso = objEntidades.recursoDetallado(listaSugerencias)
             # se obtiene el detalle como lista, cada elemento es un diccionario
             coincidencia = False
             for detalle in recurso:
@@ -266,6 +286,8 @@ def buscaRecomendacion(request):
                         break
                 if coincidencia:
                     break
+        else:
+            sugerencias == None
         del objEntidades
 
         if (sugerencias == '' or sugerencias == None or type(sugerencias) == 'str' or len(sugerencias) == 0):

@@ -157,13 +157,12 @@
                 // TAB 3
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
-                sugerencias = data['recurso'];
-                // console.log('Cargando recomendacion actual\t', sugerencias);
+                sugerencias = data['recursos'];
                 console.info('Recomendaciones\n', sugerencias);
-                // console.info('TIPO dato\t', typeof(sugerencias));
+                console.info('TIPO dato:\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>No coincidences</b>';
-                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>'+btnActualizar;
                     // Cuando no hay resultados
                 }else if(typeof(sugerencias) == 'object' && sugerencias.length > 1){
@@ -178,15 +177,15 @@
                         // lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
                     }
                     lista += '<ol>';
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>Recommendations</b>';
-                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<p class="text-justify">'+lista+btnActualizar+'</p>';
 
                     // readetalle.innerHTML = '<section class="text-justify">'+lista+'</section>';
                 }else{
                     // Un solo recurso
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>'+btnActualizar;
                 }
             }
@@ -219,7 +218,7 @@
                 var finSectionCard = '</p></section>';
                 var finCardBTitulo = '</div>';
                 var finCard = '</div>';
-
+                console.info('Searching...\n', data);
                 // TAB 2
                 var htmlSpotlight = document.getElementById("anotacionDbpedia");
                 var htmlFred = document.getElementById("anotacionFred");
@@ -250,17 +249,16 @@
                 // OUT Tab 3
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
-                sugerencias = data['recurso'];
-                console.log('Recomendacion\t', sugerencias);
-                console.log('TIPO dato\t', typeof sugerencias);
+                sugerencias = data['recursos'];
+                console.info('Recomendaciones\n', sugerencias);
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     // Cuando no hay resultados
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>No coincidences</b>';
-                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>'+btnActualizar;
                 }else if(typeof sugerencias == 'object'){
                     // Lista recurso
-                    console.log('Cantidad de sug.\t', sugerencias.length);
+                    console.info('Cantidad de sug.\t', sugerencias.length);
                     var lista = [];
                     lista = '<ol>';
                     for (indice in sugerencias) {
@@ -269,13 +267,13 @@
                         lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+url+'">See More</a></li>';
                     }
                     lista += '<ol>';
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>Recommendations</b>';
-                    btnActualizar ='<button type="button" class="btn btn-primary" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<p class="text-justify">'+lista+btnActualizar+'</p>';
                 }else{
                     // Un solo recurso
+                    btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>Recommendation</b>';
-                    btnActualizar ='<button id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     readetalle.innerHTML = '<b>'+sugerencias[0]+'</b> - <a href="/buscador/oer/'+sugerencias[1]+'">See more</a>'+btnActualizar;
                 }
             }

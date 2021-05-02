@@ -214,6 +214,7 @@ class Integracion:
         recomendacionActual = objectFunciones.search_CompUsuario(idUser, idComp)
         # print('Recomendacion actual:\n{}'.format(recomendacionActual.recomendacion))
         recomendacionActual = recomendacionActual.recomendacion
+        recomendacionActual = self.castStrToList(recomendacionActual)
         # Borramos el OBJ para liberar memoria
         del objectFunciones
         
@@ -233,21 +234,23 @@ class Integracion:
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
-        print('Cant. sugerencias\t{}\nTipo retorno\t{}\n'.format(len(sugerencias), type(sugerencias)))
+        print('Integ\nCant. sugerencias\t{}\nTipo retorno\t{}\n'.format(len(sugerencias), type(sugerencias)))
         # recomendacionActual = self.castStrToList(recomendacionActual)
         if recomendacionActual == '' or recomendacionActual == None:
             # cuando no hay sugerencias previas pero si nuevas
-            print('Integracion if 1')
-            recomendaciones = sugerencias
+            print('Integracion if')
+            recomendaciones.extend(sugerencias)
             #  and type(sugerencias) = 'NoneType'
         elif type(recomendacionActual) == list or type(sugerencias) == list:
             # cuand hay una lista de sugerencias previas y nuevas
-            print('Integracion if 2')
-            for elemento in recomendacionActual:
-                recomendaciones.append(elemento)
-            for elemento in sugerencias:
-                recomendaciones.append(elemento)
-                # cuando ya hay una lista de recomendaciones nuevas
+            print('Integracion elif')
+            recomendaciones.extend(recomendacionActual)
+            recomendaciones.extend(sugerencias)
+            # for elemento in recomendacionActual:
+            #     recomendaciones.append(elemento)
+            # for elemento in sugerencias:
+            #     recomendaciones.append(elemento)
+            # cuando ya hay una lista de recomendaciones nuevas
         else:
             # si hay una sugerencia previa y una sola sugerencia
             print('Integracion else')

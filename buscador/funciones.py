@@ -61,8 +61,8 @@ class Funciones:
                 self.update_CompUsuario(idUser, idCompetencia, recursos)
                 # Si hay error llama a la misma funcion para actulizar se (*solo va a salir si la operacion es exitosa*)
         else:
-            existe = self.search_CompUsuario(idUser, idCompetencia)
-            # Lo vuelve a buscar       
+            self.update_CompUsuario(idUser, idCompetencia, recursos)
+            # Lo vuelve a buscar
         
     
     def __del__(self):
