@@ -159,7 +159,7 @@
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recursos'];
                 // console.info('Recomendaciones\n', sugerencias);
-                // console.info('TIPO dato:\t', typeof(sugerencias));
+                console.info('TIPO dato:\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>No coincidences</b>';
@@ -173,8 +173,7 @@
                     for (indice in sugerencias) {
                         var url = '{{ base_url }}/buscador/oer/'+sugerencias[indice][1];
                         lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+url+'">See More</a></li>';
-                        // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1]);
-                        // lista += '<li><b>'+sugerencias[indice][0]+'</b> - <a href="'+sugerencias[indice][1]+'">See more</a></li>';
+                        // console.info('Recurso\t', sugerencias[indice][0], ' - ', sugerencias[indice][1], ' - ', sugerencias[indice], ' - ', indice);
                     }
                     lista += '<ol>';
                     btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';

@@ -154,7 +154,12 @@ def cargandoRecurso(request):
         objectIntegracion = Integracion()
         recursoRecomendado = objectIntegracion.castStrToList(recursoRecomendado)
         del objectIntegracion
-        print('VIEW Recurso actual:\t', recursoRecomendado)
+        """
+        if isinstance(recursoRecomendado, list):
+            print('VIEW\nRecurso actual\t{}\nCant. recomendacion:\t{}\n'.format(type(recursoRecomendado), len(recursoRecomendado)))
+        else:
+            print('VIEW\nRecurso actual\t{}\n'.format(type(recursoRecomendado)))
+        """
         sugerenciasPrevias = []
         if(recursoRecomendado == '' or recursoRecomendado == None or len(recursoRecomendado) == 0):
             # no hay sugerencias previas
@@ -162,12 +167,8 @@ def cargandoRecurso(request):
             # print('Sug. Previas\n', recursoRecomendado)
         else:
             # si hay sugerencias previas
-            print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
+            # print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
             for uri in recursoRecomendado:
-                uri = str(uri)
-                # se extrae el codigo URI para buscar su detalle
-                uri = 'http://localhost:7200/oer/recursos/'+ uri
-                # completamos la URI
                 # print('VIEW recurso\t', uri)
                 objEntidades = entitiesDigcomp()
                 recurso = objEntidades.recursoDetallado(uri)
