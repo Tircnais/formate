@@ -2,7 +2,7 @@ import fasttext as ftText
 
 class generarModelo():
     def crearModelo(self, archivo):
-        model = ftText.train_supervised(input=archivo, lr=0.45, epoch=200, wordNgrams=2, ws=5, dim=100)
+        model = ftText.train_supervised(input=archivo, lr=0.45, dim=100, epoch=200, wordNgrams=2, ws=5, loss='softmax')
         return model
     
     def guardarModelo(self, modelo, nombreModelo):

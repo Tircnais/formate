@@ -159,7 +159,7 @@
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recursos'];
                 console.info('Recomendaciones\n', sugerencias);
-                console.info('TIPO dato:\t', typeof(sugerencias));
+                // console.info('TIPO dato:\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
                     reatitulo.innerHTML = '<b>No coincidences</b>';
@@ -218,7 +218,7 @@
                 var finSectionCard = '</p></section>';
                 var finCardBTitulo = '</div>';
                 var finCard = '</div>';
-                console.info('Searching...\n', data);
+                // console.info('Searching...\n', data);
                 // TAB 2
                 var htmlSpotlight = document.getElementById("anotacionDbpedia");
                 var htmlFred = document.getElementById("anotacionFred");
