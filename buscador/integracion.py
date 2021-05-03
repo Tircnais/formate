@@ -234,25 +234,26 @@ class Integracion:
         
         sugerencias = self.buscaCoincidencias(prediconCD, listaREA)
         recomendaciones = []
-        print('Integ\nTipo retorno\t{}\n'.format(type(sugerencias)))
+        
         if recomendacionActual == '' or recomendacionActual == None:
             # cuando no hay sugerencias previas pero si nuevas
-            print('Integracion if\n')
+            # print('Integracion if\n')
             recomendaciones.extend(sugerencias)
             #  and type(sugerencias) = 'NoneType'
         elif type(recomendacionActual) == list or type(sugerencias) == list:
             # cuand hay una lista de sugerencias previas y nuevas
-            print('Integracion elif\n')
+            # print('Integracion elif\n')
             recomendaciones.extend(recomendacionActual)
             recomendaciones.extend(sugerencias)
             # cuando ya hay una lista de recomendaciones nuevas
         else:
             # si hay una sugerencia previa y una sola sugerencia
-            print('Integracion else\n')
+            # print('Integracion else\n')
             recomendaciones.append(sugerencias)
         
         recomendaciones = list(dict.fromkeys(recomendaciones))
         # Quitar duplicados en la lista
+        print('Integ\nTipo saliente\t{}\nCant. recomendacion:\t{}\n'.format(type(recomendaciones), len(recomendaciones)))
         dicionario = {}
         dicionario['recursos'] = recomendaciones
         return dicionario

@@ -158,7 +158,7 @@
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recursos'];
-                console.info('Recomendaciones\n', sugerencias);
+                // console.info('Recomendaciones\n', sugerencias);
                 // console.info('TIPO dato:\t', typeof(sugerencias));
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
@@ -167,7 +167,7 @@
                     // Cuando no hay resultados
                 }else if(typeof(sugerencias) == 'object' && sugerencias.length > 1){
                     // Un solo recurso
-                    console.info('Cantidad de sug.\t', sugerencias.length);
+                    // console.info('Cantidad de sug.\t', sugerencias.length);
                     var lista = [];
                     lista = '<ol>';
                     for (indice in sugerencias) {
@@ -250,7 +250,7 @@
                 var reatitulo = document.getElementById("nombRecurso");
                 var readetalle = document.getElementById("recomendacion");
                 sugerencias = data['recursos'];
-                console.info('Recomendaciones\n', sugerencias);
+                // console.info('Recomendaciones\n', sugerencias);
                 if(sugerencias == null || typeof(sugerencias)== 'string'){
                     // Cuando no hay resultados
                     btnActualizar ='<button type="button" class="btn btn-dark" id="id_search" onclick="ajaxRecomendaciones()">New search</button>';
@@ -258,7 +258,7 @@
                     readetalle.innerHTML = '<p class="text-justify">Available at the moment</p>'+btnActualizar;
                 }else if(typeof sugerencias == 'object'){
                     // Lista recurso
-                    console.info('Cantidad de sug.\t', sugerencias.length);
+                    // console.info('Cantidad de sug.\t', sugerencias.length);
                     var lista = [];
                     lista = '<ol>';
                     for (indice in sugerencias) {

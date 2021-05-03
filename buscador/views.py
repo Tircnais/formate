@@ -49,11 +49,6 @@ def detalleRecurso(request, uri):
         Returns:
             dict: Recurso con toda la informacion guardada
     '''
-    uri = str(uri)
-    # se extrae el codigo URI para buscar su detalle
-    uri = 'http://localhost:7200/oer/recursos/'+ uri
-    # completamos la URI
-    print('URI:\t', uri)
     servicioConsultas = entitiesDigcomp()
     reaConsultado = servicioConsultas.recursoDetallado(uri)
     del servicioConsultas
@@ -169,7 +164,10 @@ def cargandoRecurso(request):
             # si hay sugerencias previas
             print('VIEW Sugerencia actual\tTipo: {}\tTam: {}'.format(type(recursoRecomendado), len(recursoRecomendado)))
             for uri in recursoRecomendado:
-                uri = 'http://localhost:7200/oer/recursos/'+uri 
+                uri = str(uri)
+                # se extrae el codigo URI para buscar su detalle
+                uri = 'http://localhost:7200/oer/recursos/'+ uri
+                # completamos la URI
                 # print('VIEW recurso\t', uri)
                 objEntidades = entitiesDigcomp()
                 recurso = objEntidades.recursoDetallado(uri)
@@ -246,10 +244,14 @@ def buscaRecomendacion(request):
         
         sugerencias = []
         objEntidades = entitiesDigcomp()
-        print('VIEW\nTipo retorno\t{}\n'.format(type(listaSugerencias)))
+        """
+        if isinstance(listaSugerencias, list):
+            print('VIEW\nTipo entrante\t{}\nCant. recomendacion:\t{}\n'.format(type(listaSugerencias), len(listaSugerencias)))
+        else:
+            print('VIEW\nTipo entrante\t{}\n'.format(type(listaSugerencias)))
+        """
         if isinstance(listaSugerencias, list):
             for uri in listaSugerencias:
-                # print('VIEW recurso\t', uri)
                 recurso = objEntidades.recursoDetallado(uri)
                 # se obtiene el detalle como lista, cada elemento es un diccionario
                 coincidencia = False
@@ -266,7 +268,7 @@ def buscaRecomendacion(request):
                             break
                     if coincidencia:
                         break
-            print('Entro LIST')
+            # print('Entro LIST')
         elif isinstance(listaSugerencias, str):
             # print('VIEW recurso\t', listaSugerencias)
             recurso = objEntidades.recursoDetallado(listaSugerencias)
@@ -285,14 +287,13 @@ def buscaRecomendacion(request):
                         break
                 if coincidencia:
                     break
-            print('Entro STR')
+            # print('Entro STR')
         else:
             sugerencias = None
             # no hay sugerencias previas
-            print('Entro None')
+            # print('Entro None')
         del objEntidades
 
-        print('VIEW\nTipo saliente\t{}\n'.format(type(sugerencias)))
         context['recursos'] = sugerencias
         # Se destruye el objeto con la funcion creada
         return JsonResponse(context, safe=False)

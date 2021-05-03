@@ -243,7 +243,11 @@ class entitiesDigcomp:
         # Apertura del endpoint para ejecutar la consulta
         sparqlendpoint ="http://localhost:7200/repositories/02"
         sbcEndpoint = SPARQLWrapper(sparqlendpoint)
-
+        uri = str(uri)
+        # se extrae el codigo URI para buscar su detalle
+        uri = 'http://localhost:7200/oer/recursos/'+ uri
+        # completamos la URI
+        # print('URI:\t', uri)
         # Consulta SPARQL para lista recursos disponibles
         consulta = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
